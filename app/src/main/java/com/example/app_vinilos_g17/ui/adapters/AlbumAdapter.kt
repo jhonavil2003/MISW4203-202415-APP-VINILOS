@@ -4,10 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_vinilos_g17.R
 import com.example.app_vinilos_g17.databinding.AlbumItemBinding
 import com.example.app_vinilos_g17.models.Album
+import com.example.app_vinilos_g17.ui.albums.AlbumFragmentDirections
+// import com.example.vinyls_jetpack_application.ui.AlbumFragmentDirections
 
 class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>(){
 
@@ -31,6 +34,10 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>(){
             it.album = albums[position]
         }
         holder.viewDataBinding.root.setOnClickListener {
+            val action = AlbumFragmentDirections.actionNavigationAlbumsToNavigationAlbumDetail(albums[position].id)
+            holder.viewDataBinding.root.findNavController().navigate(action)
+//            val action = AlbumFragmentDirections.actionNavigationAlbumsToNavigationAlbumDetail(albums[position].albumId)
+//            holder.viewDataBinding.root.findNavController().navigate(action)
 //            val action = AlbumFragmentDirections.actionAlbumFragmentToCommentFragment(albums[position].albumId)
 //            // Navigate using that action
 //            holder.viewDataBinding.root.findNavController().navigate(action)
