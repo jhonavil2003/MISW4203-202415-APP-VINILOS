@@ -10,6 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.app_vinilos_g17.databinding.FragmentAlbumDetailBinding
+import androidx.appcompat.app.AppCompatActivity
+
 
 class AlbumDetailFragment : Fragment() {
     private var _binding: FragmentAlbumDetailBinding? = null
@@ -32,6 +34,7 @@ class AlbumDetailFragment : Fragment() {
 
         viewModel.album.observe(viewLifecycleOwner, Observer { album ->
             binding.album = album // Enlaza el álbum al layout
+            (activity as? AppCompatActivity)?.supportActionBar?.title = album.name
         })
 
         viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer { isNetworkError ->

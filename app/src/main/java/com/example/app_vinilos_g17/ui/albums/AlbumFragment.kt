@@ -11,6 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.app_vinilos_g17.ui.adapters.AlbumAdapter
 import com.example.app_vinilos_g17.databinding.FragmentAlbumBinding
+import androidx.appcompat.app.AppCompatActivity
+import com.example.app_vinilos_g17.R
+
 
 class AlbumFragment : Fragment() {
 
@@ -33,6 +36,7 @@ class AlbumFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.title_albums)
 
         binding.albumsRv.apply {
             layoutManager = LinearLayoutManager(context)
