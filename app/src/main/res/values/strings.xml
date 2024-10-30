@@ -6,4 +6,7 @@
     <string name="title_artists">Artistas</string>
     <string name="title_collectors">Coleccionistas</string>
 
+    <string name="album_name_placeholder">Nombre del album</string>
+    <string name="album_description_placeholder">Descripcion del album</string>
+
 </resources>
