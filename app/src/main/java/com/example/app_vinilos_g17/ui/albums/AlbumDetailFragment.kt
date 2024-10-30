@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.app_vinilos_g17.databinding.FragmentAlbumDetailBinding
-import com.example.app_vinilos_g17.ui.albums.AlbumDetailViewModel
 
 class AlbumDetailFragment : Fragment() {
     private var _binding: FragmentAlbumDetailBinding? = null
@@ -32,7 +31,7 @@ class AlbumDetailFragment : Fragment() {
         viewModel = ViewModelProvider(this, AlbumDetailViewModel.Factory(requireActivity().application, albumId)).get(AlbumDetailViewModel::class.java)
 
         viewModel.album.observe(viewLifecycleOwner, Observer { album ->
-            binding.textViewDetail.text = album.name // Muestra solo el nombre del álbum
+            binding.album = album // Enlaza el álbum al layout
         })
 
         viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer { isNetworkError ->
