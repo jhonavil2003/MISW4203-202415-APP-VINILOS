@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_albums"
-        android:name="com.example.app_vinilos_g17.ui.albums.AlbumsFragment"
+        android:name="com.example.app_vinilos_g17.ui.albums.AlbumFragment"
         android:label="@string/title_albums"
-        tools:layout="@layout/fragment_albums" />
+        tools:layout="@layout/fragment_album" />
 
     <fragment
         android:id="@+id/navigation_artists"
