@@ -9,7 +9,9 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.app_vinilos_g17.models.Album
+import com.example.app_vinilos_g17.models.Comment
 import com.example.app_vinilos_g17.models.Performer
+import com.example.app_vinilos_g17.models.Track
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -41,7 +43,6 @@ class NetworkServiceAdapter(context: Context) {
 
                     for (j in 0 until performersArray.length()) {
                         val performerObject = performersArray.getJSONObject(j)
-                        Log.d("Network", "Performers: $performerObject")
 
                         // Verificar si birthDate está presente
                         val birthDate = if (performerObject.has("birthDate")) {
@@ -60,6 +61,32 @@ class NetworkServiceAdapter(context: Context) {
                         performersList.add(performer)
                     }
 
+                    // Procesar tracks
+                    val tracksArray = item.getJSONArray("tracks")
+                    val tracksList = mutableListOf<Track>()
+                    for (k in 0 until tracksArray.length()) {
+                        val trackObject = tracksArray.getJSONObject(k)
+                        val track = Track(
+                            id = trackObject.getInt("id"),
+                            name = trackObject.getString("name"),
+                            duration = trackObject.getString("duration")
+                        )
+                        tracksList.add(track)
+                    }
+
+                    // Procesar comments
+                    val commentsArray = item.getJSONArray("comments")
+                    val commentsList = mutableListOf<Comment>()
+                    for (l in 0 until commentsArray.length()) {
+                        val commentObject = commentsArray.getJSONObject(l)
+                        val comment = Comment(
+                            id = commentObject.getInt("id"),
+                            description = commentObject.getString("description"),
+                            rating = commentObject.getString("rating")
+                        )
+                        commentsList.add(comment)
+                    }
+
                     list.add(Album(
                         id = item.getInt("id"),
                         name = item.getString("name"),
@@ -69,7 +96,8 @@ class NetworkServiceAdapter(context: Context) {
                         genre = item.getString("genre"),
                         description = item.getString("description"),
                         performers = performersList,
-                        tracks = item.getString("tracks")
+                        tracks = tracksList,
+                        comments = commentsList
                     ))
                 }
                 onComplete(list)
@@ -78,6 +106,7 @@ class NetworkServiceAdapter(context: Context) {
                 onError(it)
             }))
     }
+
 
     fun getAlbumDetail(albumId: Int, onComplete: (album: Album) -> Unit, onError: (error: VolleyError) -> Unit) {
         requestQueue.add(getRequest("albums/$albumId",
@@ -108,6 +137,32 @@ class NetworkServiceAdapter(context: Context) {
                     performersList.add(performer)
                 }
 
+                // Procesar tracks
+                val tracksArray = resp.getJSONArray("tracks")
+                val tracksList = mutableListOf<Track>()
+                for (k in 0 until tracksArray.length()) {
+                    val trackObject = tracksArray.getJSONObject(k)
+                    val track = Track(
+                        id = trackObject.getInt("id"),
+                        name = trackObject.getString("name"),
+                        duration = trackObject.getString("duration")
+                    )
+                    tracksList.add(track)
+                }
+
+                // Procesar comments
+                val commentsArray = resp.getJSONArray("comments")
+                val commentsList = mutableListOf<Comment>()
+                for (l in 0 until commentsArray.length()) {
+                    val commentObject = commentsArray.getJSONObject(l)
+                    val comment = Comment(
+                        id = commentObject.getInt("id"),
+                        description = commentObject.getString("description"),
+                        rating = commentObject.getString("rating")
+                    )
+                    commentsList.add(comment)
+                }
+
                 val album = Album(
                     id = resp.getInt("id"),
                     name = resp.getString("name"),
@@ -117,7 +172,8 @@ class NetworkServiceAdapter(context: Context) {
                     genre = resp.getString("genre"),
                     description = resp.getString("description"),
                     performers = performersList,
-                    tracks = resp.getString("tracks")
+                    tracks = tracksList,
+                    comments = commentsList
                 )
                 onComplete(album)
             },
@@ -125,6 +181,7 @@ class NetworkServiceAdapter(context: Context) {
                 onError(it)
             }))
     }
+
 
     private fun getRequest(path: String, responseListener: Response.Listener<String>, errorListener: Response.ErrorListener): StringRequest {
         return StringRequest(Request.Method.GET, BASE_URL + path, responseListener, errorListener)
