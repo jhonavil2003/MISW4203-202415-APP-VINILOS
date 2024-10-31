@@ -9,7 +9,21 @@
         android:id="@+id/navigation_albums"
         android:name="com.example.app_vinilos_g17.ui.albums.AlbumFragment"
         android:label="@string/title_albums"
-        tools:layout="@layout/fragment_album" />
+        tools:layout="@layout/fragment_album" >
+        <action
+            android:id="@+id/action_navigation_albums_to_navigation_albumDetail"
+            app:destination="@id/navigation_albumDetail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_albumDetail"
+        android:name="com.example.app_vinilos_g17.ui.albums.AlbumDetailFragment"
+        android:label="@string/title_albums"
+        tools:layout="@layout/fragment_album_detail">
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_artists"
