@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.navigation.safe.args)
+    kotlin("kapt")
 }
 
 android {
@@ -66,10 +67,11 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
+    implementation("com.github.bumptech.glide:glide:4.13.2")
+    kapt("com.github.bumptech.glide:compiler:4.13.2") // Para el procesamiento de anotaciones
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Jetpack Compose integration (si la usas)
-    // implementation("androidx.navigation:navigation-compose:${libs.versions.navigationVersion.get()}")
 }

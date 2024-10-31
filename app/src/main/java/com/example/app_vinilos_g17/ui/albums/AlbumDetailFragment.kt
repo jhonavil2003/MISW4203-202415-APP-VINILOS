@@ -32,14 +32,14 @@ class AlbumDetailFragment : Fragment() {
         val albumId = args.id
         viewModel = ViewModelProvider(this, AlbumDetailViewModel.Factory(requireActivity().application, albumId)).get(AlbumDetailViewModel::class.java)
 
-        viewModel.album.observe(viewLifecycleOwner, Observer { album ->
+        viewModel.album.observe(viewLifecycleOwner) { album ->
             binding.album = album // Enlaza el álbum al layout
             (activity as? AppCompatActivity)?.supportActionBar?.title = album.name
-        })
+        }
 
-        viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer { isNetworkError ->
+        viewModel.eventNetworkError.observe(viewLifecycleOwner) { isNetworkError ->
             if (isNetworkError) onNetworkError()
-        })
+        }
     }
 
     override fun onDestroyView() {
@@ -52,3 +52,4 @@ class AlbumDetailFragment : Fragment() {
         viewModel.onNetworkErrorShown()
     }
 }
+
