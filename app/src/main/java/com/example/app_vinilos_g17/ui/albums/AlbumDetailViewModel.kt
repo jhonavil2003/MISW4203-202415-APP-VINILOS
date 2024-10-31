@@ -28,7 +28,6 @@ class AlbumDetailViewModel(application: Application, albumId: Int) : AndroidView
 
     private fun fetchAlbumDetails(albumId: Int) {
         albumRepository.getAlbumDetail(albumId, { fetchedAlbum ->
-            // Formateamos la fecha antes de asignarla
             val formattedAlbum = fetchedAlbum.copy(releaseDate = formatReleaseDate(fetchedAlbum.releaseDate))
             _album.postValue(formattedAlbum)
             _eventNetworkError.value = false

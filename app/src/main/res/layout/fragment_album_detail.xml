@@ -112,5 +112,19 @@
             android:text="@{album.description}"
             android:textSize="16sp"
             android:layout_marginTop="16dp"/>
+        <TextView
+            android:id="@+id/textViewPerformersTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Intérpretes"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="16dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewPerformers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </layout>

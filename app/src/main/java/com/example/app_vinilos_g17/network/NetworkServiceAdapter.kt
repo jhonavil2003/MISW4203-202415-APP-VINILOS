@@ -13,9 +13,9 @@ import com.example.app_vinilos_g17.models.Performer
 import org.json.JSONArray
 import org.json.JSONObject
 
-class NetworkServiceAdapter (context: Context) {
-    companion object{
-        const val BASE_URL= "https://blackvynils-827885dbcaa3.herokuapp.com/"
+class NetworkServiceAdapter(context: Context) {
+    companion object {
+        const val BASE_URL = "https://blackvynils-827885dbcaa3.herokuapp.com/"
         var instance: NetworkServiceAdapter? = null
         fun getInstance(context: Context) =
             instance ?: synchronized(this) {
@@ -24,10 +24,12 @@ class NetworkServiceAdapter (context: Context) {
                 }
             }
     }
+
     private val requestQueue: RequestQueue by lazy {
         Volley.newRequestQueue(context.applicationContext)
     }
-    fun getAlbums(onComplete:(resp:List<Album>)->Unit, onError: (error:VolleyError)->Unit){
+
+    fun getAlbums(onComplete: (resp: List<Album>) -> Unit, onError: (error: VolleyError) -> Unit) {
         requestQueue.add(getRequest("albums",
             { response ->
                 val resp = JSONArray(response)
@@ -40,24 +42,35 @@ class NetworkServiceAdapter (context: Context) {
                     for (j in 0 until performersArray.length()) {
                         val performerObject = performersArray.getJSONObject(j)
                         Log.d("Network", "Performers: $performerObject")
+
+                        // Verificar si birthDate está presente
+                        val birthDate = if (performerObject.has("birthDate")) {
+                            performerObject.getString("birthDate")
+                        } else {
+                            "Fecha no disponible"
+                        }
+
                         val performer = Performer(
                             performerObject.getInt("id"),
                             performerObject.getString("name"),
                             performerObject.getString("image"),
-                            performerObject.getString("description")
+                            performerObject.getString("description"),
+                            birthDate
                         )
                         performersList.add(performer)
                     }
 
-                    list.add(i, Album(id = item.getInt("id"),
-                                        name = item.getString("name"),
-                                        cover = item.getString("cover"),
-                                        recordLabel = item.getString("recordLabel"),
-                                        releaseDate = item.getString("releaseDate"),
-                                        genre = item.getString("genre"),
-                                        description = item.getString("description"),
-                                        performers = performersList,
-                                        tracks = item.getString("tracks")))
+                    list.add(Album(
+                        id = item.getInt("id"),
+                        name = item.getString("name"),
+                        cover = item.getString("cover"),
+                        recordLabel = item.getString("recordLabel"),
+                        releaseDate = item.getString("releaseDate"),
+                        genre = item.getString("genre"),
+                        description = item.getString("description"),
+                        performers = performersList,
+                        tracks = item.getString("tracks")
+                    ))
                 }
                 onComplete(list)
             },
@@ -77,11 +90,20 @@ class NetworkServiceAdapter (context: Context) {
 
                 for (j in 0 until performersArray.length()) {
                     val performerObject = performersArray.getJSONObject(j)
+
+                    // Verificar si birthDate está presente
+                    val birthDate = if (performerObject.has("birthDate")) {
+                        performerObject.getString("birthDate")
+                    } else {
+                        "Fecha no disponible"
+                    }
+
                     val performer = Performer(
                         id = performerObject.getInt("id"),
                         name = performerObject.getString("name"),
                         image = performerObject.getString("image"),
-                        description = performerObject.getString("description")
+                        description = performerObject.getString("description"),
+                        birthDate = birthDate
                     )
                     performersList.add(performer)
                 }
@@ -104,9 +126,7 @@ class NetworkServiceAdapter (context: Context) {
             }))
     }
 
-
-
-    private fun getRequest(path:String, responseListener: Response.Listener<String>, errorListener: Response.ErrorListener): StringRequest {
-        return StringRequest(Request.Method.GET, BASE_URL+path, responseListener,errorListener)
+    private fun getRequest(path: String, responseListener: Response.Listener<String>, errorListener: Response.ErrorListener): StringRequest {
+        return StringRequest(Request.Method.GET, BASE_URL + path, responseListener, errorListener)
     }
 }
