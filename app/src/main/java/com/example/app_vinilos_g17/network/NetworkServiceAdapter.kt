@@ -1,7 +1,6 @@
 package com.example.app_vinilos_g17.network
 
 import android.content.Context
-import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -31,7 +30,7 @@ class NetworkServiceAdapter(context: Context) {
         Volley.newRequestQueue(context.applicationContext)
     }
 
-    fun getAlbums(onComplete: (resp: List<Album>) -> Unit, onError: (error: VolleyError) -> Unit) {
+    fun getAlbumList(onComplete: (resp: List<Album>) -> Unit, onError: (error: VolleyError) -> Unit) {
         requestQueue.add(getRequest("albums",
             { response ->
                 val resp = JSONArray(response)

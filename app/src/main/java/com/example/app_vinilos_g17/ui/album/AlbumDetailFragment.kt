@@ -1,4 +1,4 @@
-package com.example.app_vinilos_g17.ui.albums
+package com.example.app_vinilos_g17.ui.album
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.app_vinilos_g17.databinding.FragmentAlbumDetailBinding
 import com.example.app_vinilos_g17.ui.adapters.TrackAdapter
 import com.example.app_vinilos_g17.ui.adapters.CommentAdapter
+import com.example.app_vinilos_g17.viewmodels.AlbumDetailViewModel
 
 class AlbumDetailFragment : Fragment() {
     private var _binding: FragmentAlbumDetailBinding? = null
@@ -34,7 +35,8 @@ class AlbumDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val albumId = args.id
-        viewModel = ViewModelProvider(this, AlbumDetailViewModel.Factory(requireActivity().application, albumId)).get(AlbumDetailViewModel::class.java)
+        viewModel = ViewModelProvider(this, AlbumDetailViewModel.Factory(requireActivity().application, albumId)).get(
+            AlbumDetailViewModel::class.java)
 
         // Inicializa el RecyclerView para intérpretes
         binding.recyclerViewPerformers.layoutManager = LinearLayoutManager(context)

@@ -4,14 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View" />
-        <variable name="viewModel" type="com.example.app_vinilos_g17.ui.albums.AlbumViewModel"/>
+        <variable name="viewModel" type="com.example.app_vinilos_g17.viewmodels.AlbumListViewModel"/>
     </data>
 
     <FrameLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.albums.AlbumFragment"
+        tools:context=".ui.album.AlbumListFragment"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp">
 

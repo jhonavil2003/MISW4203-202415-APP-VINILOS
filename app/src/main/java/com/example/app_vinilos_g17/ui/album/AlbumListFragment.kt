@@ -1,4 +1,4 @@
-package com.example.app_vinilos_g17.ui.albums
+package com.example.app_vinilos_g17.ui.album
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,28 +9,29 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.app_vinilos_g17.ui.adapters.AlbumAdapter
-import com.example.app_vinilos_g17.databinding.FragmentAlbumBinding
+import com.example.app_vinilos_g17.ui.adapters.AlbumListAdapter
+import com.example.app_vinilos_g17.databinding.FragmentAlbumListBinding
 import androidx.appcompat.app.AppCompatActivity
 import com.example.app_vinilos_g17.R
+import com.example.app_vinilos_g17.viewmodels.AlbumListViewModel
 
 
-class AlbumFragment : Fragment() {
+class AlbumListFragment : Fragment() {
 
-    private var _binding: FragmentAlbumBinding? = null
+    private var _binding: FragmentAlbumListBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AlbumViewModel by viewModels { AlbumViewModel.Factory(requireActivity().application) }
-    private lateinit var viewModelAdapter: AlbumAdapter
+    private val viewModel: AlbumListViewModel by viewModels { AlbumListViewModel.Factory(requireActivity().application) }
+    private lateinit var viewModelAdapter: AlbumListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAlbumBinding.inflate(inflater, container, false)
+        _binding = FragmentAlbumListBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        viewModelAdapter = AlbumAdapter()
+        viewModelAdapter = AlbumListAdapter()
         return binding.root
     }
 

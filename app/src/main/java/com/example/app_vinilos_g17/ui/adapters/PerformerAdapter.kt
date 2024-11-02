@@ -1,4 +1,4 @@
-package com.example.app_vinilos_g17.ui.albums
+package com.example.app_vinilos_g17.ui.album
 
 import android.view.LayoutInflater
 import android.view.View

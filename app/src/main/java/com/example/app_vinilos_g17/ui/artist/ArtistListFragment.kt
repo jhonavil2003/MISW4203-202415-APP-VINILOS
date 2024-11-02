@@ -1,4 +1,4 @@
-package com.example.app_vinilos_g17.ui.artists
+package com.example.app_vinilos_g17.ui.artist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.app_vinilos_g17.databinding.FragmentArtistsBinding
+import com.example.app_vinilos_g17.databinding.FragmentArtistListBinding
+import com.example.app_vinilos_g17.viewmodels.ArtistsViewModel
 
-class ArtistsFragment : Fragment() {
-    private var _binding: FragmentArtistsBinding? = null
+class ArtistListFragment : Fragment() {
+    private var _binding: FragmentArtistListBinding? = null
 
     private val binding get() = _binding!!
 
@@ -22,7 +23,7 @@ class ArtistsFragment : Fragment() {
         val artistsViewModel =
             ViewModelProvider(this).get(ArtistsViewModel::class.java)
 
-        _binding = FragmentArtistsBinding.inflate(inflater, container, false)
+        _binding = FragmentArtistListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textArtists
