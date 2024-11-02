@@ -1,4 +1,4 @@
-package com.example.app_vinilos_g17.ui.collectors
+package com.example.app_vinilos_g17.ui.collector
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.app_vinilos_g17.databinding.FragmentCollectorsBinding
+import com.example.app_vinilos_g17.databinding.FragmentCollectorListBinding
+import com.example.app_vinilos_g17.viewmodels.CollectorsViewModel
 
 
-class CollectorsFragment : Fragment() {
-    private var _binding: FragmentCollectorsBinding? = null
+class CollectorListFragment : Fragment() {
+    private var _binding: FragmentCollectorListBinding? = null
 
     private val binding get() = _binding!!
 
@@ -23,7 +24,7 @@ class CollectorsFragment : Fragment() {
         val collectorsViewModel =
             ViewModelProvider(this).get(CollectorsViewModel::class.java)
 
-        _binding = FragmentCollectorsBinding.inflate(inflater, container, false)
+        _binding = FragmentCollectorListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textCollectors

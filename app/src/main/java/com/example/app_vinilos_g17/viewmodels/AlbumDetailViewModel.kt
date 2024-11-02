@@ -1,4 +1,4 @@
-package com.example.app_vinilos_g17.ui.albums
+package com.example.app_vinilos_g17.viewmodels
 
 import android.app.Application
 import android.util.Log

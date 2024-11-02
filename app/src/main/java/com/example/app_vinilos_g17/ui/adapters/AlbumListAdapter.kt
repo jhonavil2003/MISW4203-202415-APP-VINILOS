@@ -9,10 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.app_vinilos_g17.R
 import com.example.app_vinilos_g17.databinding.AlbumItemBinding
 import com.example.app_vinilos_g17.models.Album
-import com.example.app_vinilos_g17.ui.albums.AlbumFragmentDirections
-// import com.example.vinyls_jetpack_application.ui.AlbumFragmentDirections
+import com.example.app_vinilos_g17.ui.album.AlbumListFragmentDirections
 
-class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>(){
+class AlbumListAdapter : RecyclerView.Adapter<AlbumListAdapter.AlbumViewHolder>(){
 
     var albums :List<Album> = emptyList()
         set(value) {
@@ -34,7 +33,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>(){
             it.album = albums[position]
         }
         holder.viewDataBinding.root.setOnClickListener {
-            val action = AlbumFragmentDirections.actionNavigationAlbumsToNavigationAlbumDetail(albums[position].id)
+            val action = AlbumListFragmentDirections.actionNavigationAlbumsToNavigationAlbumDetail(albums[position].id)
             holder.viewDataBinding.root.findNavController().navigate(action)
         }
     }

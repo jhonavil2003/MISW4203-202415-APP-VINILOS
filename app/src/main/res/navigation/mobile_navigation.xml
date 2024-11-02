@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_albums"
-        android:name="com.example.app_vinilos_g17.ui.albums.AlbumFragment"
+        android:name="com.example.app_vinilos_g17.ui.album.AlbumListFragment"
         android:label="@string/title_albums"
-        tools:layout="@layout/fragment_album" >
+        tools:layout="@layout/fragment_album_list" >
         <action
             android:id="@+id/action_navigation_albums_to_navigation_albumDetail"
             app:destination="@id/navigation_albumDetail" />
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_albumDetail"
-        android:name="com.example.app_vinilos_g17.ui.albums.AlbumDetailFragment"
+        android:name="com.example.app_vinilos_g17.ui.album.AlbumDetailFragment"
         android:label="@string/title_albums"
         tools:layout="@layout/fragment_album_detail">
         <argument
@@ -27,13 +27,13 @@
 
     <fragment
         android:id="@+id/navigation_artists"
-        android:name="com.example.app_vinilos_g17.ui.artists.ArtistsFragment"
+        android:name="com.example.app_vinilos_g17.ui.artist.ArtistListFragment"
         android:label="@string/title_artists"
-        tools:layout="@layout/fragment_artists" />
+        tools:layout="@layout/fragment_artist_list" />
 
     <fragment
         android:id="@+id/navigation_collectors"
-        android:name="com.example.app_vinilos_g17.ui.collectors.CollectorsFragment"
+        android:name="com.example.app_vinilos_g17.ui.collector.CollectorListFragment"
         android:label="@string/title_collectors"
-        tools:layout="@layout/fragment_collectors" />
+        tools:layout="@layout/fragment_collector_list" />
 </navigation>
