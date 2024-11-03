@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_albums"
-        android:name="com.example.app_vinilos_g17.ui.album.AlbumListFragment"
+        android:name="com.example.app_vinilos_g17.ui.view.AlbumListFragment"
         android:label="@string/title_albums"
         tools:layout="@layout/fragment_album_list" >
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_albumDetail"
-        android:name="com.example.app_vinilos_g17.ui.album.AlbumDetailFragment"
+        android:name="com.example.app_vinilos_g17.ui.view.AlbumDetailFragment"
         android:label="@string/title_albums"
         tools:layout="@layout/fragment_album_detail">
         <argument
@@ -27,13 +27,13 @@
 
     <fragment
         android:id="@+id/navigation_artists"
-        android:name="com.example.app_vinilos_g17.ui.artist.ArtistListFragment"
+        android:name="com.example.app_vinilos_g17.ui.view.ArtistListFragment"
         android:label="@string/title_artists"
         tools:layout="@layout/fragment_artist_list" />
 
     <fragment
         android:id="@+id/navigation_collectors"
-        android:name="com.example.app_vinilos_g17.ui.collector.CollectorListFragment"
+        android:name="com.example.app_vinilos_g17.ui.view.CollectorListFragment"
         android:label="@string/title_collectors"
         tools:layout="@layout/fragment_collector_list" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.app_vinilos_g17.ui.album
+package com.example.app_vinilos_g17.ui.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.app_vinilos_g17.databinding.FragmentAlbumDetailBinding
 import com.example.app_vinilos_g17.ui.adapters.TrackAdapter
 import com.example.app_vinilos_g17.ui.adapters.CommentAdapter
+import com.example.app_vinilos_g17.ui.album.PerformerAdapter
 import com.example.app_vinilos_g17.viewmodels.AlbumDetailViewModel
 
 class AlbumDetailFragment : Fragment() {

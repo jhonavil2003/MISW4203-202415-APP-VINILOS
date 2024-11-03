@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.app_vinilos_g17.R
 import com.example.app_vinilos_g17.databinding.AlbumItemBinding
 import com.example.app_vinilos_g17.models.Album
-import com.example.app_vinilos_g17.ui.album.AlbumListFragmentDirections
+import com.example.app_vinilos_g17.ui.view.AlbumListFragmentDirections
 
 class AlbumListAdapter : RecyclerView.Adapter<AlbumListAdapter.AlbumViewHolder>(){
 
