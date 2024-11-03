@@ -5,7 +5,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.app_vinilos_g17.MainActivity
+import com.example.app_vinilos_g17.ui.view.HomeActivity
 import com.example.app_vinilos_g17.R
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.CoreMatchers.allOf
@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 class AlbumListFragmentTest {
 
     @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val activityRule = ActivityScenarioRule(HomeActivity::class.java)
 
     @Test
     fun testAlbumListDisplayed() {
