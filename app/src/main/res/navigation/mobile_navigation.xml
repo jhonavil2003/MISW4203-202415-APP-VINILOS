@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_albums">
+
+    <fragment
+        android:id="@+id/navigation_albums"
+        android:name="com.example.app_vinilos_g17.ui.view.AlbumListFragment"
+        android:label="@string/title_albums"
+        tools:layout="@layout/fragment_album_list" >
+        <action
+            android:id="@+id/action_navigation_albums_to_navigation_albumDetail"
+            app:destination="@id/navigation_albumDetail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_albumDetail"
+        android:name="com.example.app_vinilos_g17.ui.view.AlbumDetailFragment"
+        android:label="@string/title_albums"
+        tools:layout="@layout/fragment_album_detail">
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_artists"
+        android:name="com.example.app_vinilos_g17.ui.view.ArtistListFragment"
+        android:label="@string/title_artists"
+        tools:layout="@layout/fragment_artist_list" />
+
+    <fragment
+        android:id="@+id/navigation_collectors"
+        android:name="com.example.app_vinilos_g17.ui.view.CollectorListFragment"
+        android:label="@string/title_collectors"
+        tools:layout="@layout/fragment_collector_list" />
+</navigation>

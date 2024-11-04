@@ -22,4 +22,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "APP-VINILOS-G17"
 include(":app")
- 
