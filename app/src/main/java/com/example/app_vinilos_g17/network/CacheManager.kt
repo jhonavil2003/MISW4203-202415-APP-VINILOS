@@ -1,8 +1,10 @@
 package com.example.app_vinilos_g17.network
 
 import android.content.Context
+import android.util.Log
 import android.util.LruCache
 import com.example.app_vinilos_g17.models.Album
+import com.example.app_vinilos_g17.models.Collector
 
 class CacheManager(context: Context) {
 
@@ -17,15 +19,28 @@ class CacheManager(context: Context) {
             }
         }
     }
+
+    //LruCache para detalle de album
     private var albumCache: LruCache<Int, Album> = LruCache(10)
 
-    // Función para agregar detalles de un álbum al caché
     fun addAlbumDetails(albumId: Int, album: Album) {
         albumCache.put(albumId, album)
     }
 
-    // Función para obtener los detalles de un álbum desde el caché
     fun getAlbumDetails(albumId: Int): Album? {
         return albumCache.get(albumId)
+    }
+
+    //lruCache para listar coleccionistas
+    private var collectorsCache: LruCache<String, List<Collector>> = LruCache(10)
+    fun addCollectors(collectors: List<Collector>) {
+        collectorsCache.put("collectors", collectors)
+    }
+    fun getCollectors(): List<Collector> {
+        val cachedCollectors = collectorsCache.get("collectors")
+        if (cachedCollectors != null && cachedCollectors.isNotEmpty()) {
+            return cachedCollectors
+        }
+        return emptyList()
     }
 }
