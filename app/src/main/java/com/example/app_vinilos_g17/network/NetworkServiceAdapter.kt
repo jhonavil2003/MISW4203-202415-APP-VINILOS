@@ -8,6 +8,7 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.app_vinilos_g17.models.Album
+import com.example.app_vinilos_g17.models.Collector
 import com.example.app_vinilos_g17.models.Comment
 import com.example.app_vinilos_g17.models.Performer
 import com.example.app_vinilos_g17.models.Track
@@ -191,6 +192,23 @@ class NetworkServiceAdapter(context: Context) {
                 cont.resumeWithException(error)
             }
         ))
+    }
+
+    suspend fun getCollectors() = suspendCoroutine<List<Collector>>{ cont->
+        requestQueue.add(getRequest("collectors",
+            { response ->
+                val resp = JSONArray(response)
+                val list = mutableListOf<Collector>()
+                for (i in 0 until resp.length()) { //inicializado como variable de retorno
+                    val item = resp.getJSONObject(i)
+                    val collector = Collector(collectorId = item.getInt("id"),name = item.getString("name"), telephone = item.getString("telephone"), email = item.getString("email"))
+                    list.add(collector) //se agrega a medida que se procesa la respuesta
+                }
+                cont.resume(list)
+            },
+            {
+                cont.resumeWithException(it)
+            }))
     }
 
 
