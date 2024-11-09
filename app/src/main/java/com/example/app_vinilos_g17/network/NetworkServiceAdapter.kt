@@ -13,6 +13,9 @@ import com.example.app_vinilos_g17.models.Performer
 import com.example.app_vinilos_g17.models.Track
 import org.json.JSONArray
 import org.json.JSONObject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class NetworkServiceAdapter(context: Context) {
     companion object {
@@ -107,79 +110,89 @@ class NetworkServiceAdapter(context: Context) {
     }
 
 
-    fun getAlbumDetail(albumId: Int, onComplete: (album: Album) -> Unit, onError: (error: VolleyError) -> Unit) {
+    suspend fun getAlbumDetail(albumId: Int): Album = suspendCoroutine { cont ->
         requestQueue.add(getRequest("albums/$albumId",
             { response ->
-                val resp = JSONObject(response)
+                try {
+                    val resp = JSONObject(response)
 
-                // Obtener la lista de performers
-                val performersArray = resp.getJSONArray("performers")
-                val performersList = mutableListOf<Performer>()
+                    // Obtener la lista de performers
+                    val performersArray = resp.getJSONArray("performers")
+                    val performersList = mutableListOf<Performer>()
 
-                for (j in 0 until performersArray.length()) {
-                    val performerObject = performersArray.getJSONObject(j)
+                    for (j in 0 until performersArray.length()) {
+                        val performerObject = performersArray.getJSONObject(j)
 
-                    // Verificar si birthDate está presente
-                    val birthDate = if (performerObject.has("birthDate")) {
-                        performerObject.getString("birthDate")
-                    } else {
-                        "Fecha no disponible"
+                        val birthDate = if (performerObject.has("birthDate")) {
+                            performerObject.getString("birthDate")
+                        } else {
+                            "Fecha no disponible"
+                        }
+
+                        val performer = Performer(
+                            id = performerObject.getInt("id"),
+                            name = performerObject.getString("name"),
+                            image = performerObject.getString("image"),
+                            description = performerObject.getString("description"),
+                            birthDate = birthDate
+                        )
+                        performersList.add(performer)
                     }
 
-                    val performer = Performer(
-                        id = performerObject.getInt("id"),
-                        name = performerObject.getString("name"),
-                        image = performerObject.getString("image"),
-                        description = performerObject.getString("description"),
-                        birthDate = birthDate
-                    )
-                    performersList.add(performer)
-                }
+                    // Procesar tracks
+                    val tracksArray = resp.getJSONArray("tracks")
+                    val tracksList = mutableListOf<Track>()
+                    for (k in 0 until tracksArray.length()) {
+                        val trackObject = tracksArray.getJSONObject(k)
+                        val track = Track(
+                            id = trackObject.getInt("id"),
+                            name = trackObject.getString("name"),
+                            duration = trackObject.getString("duration")
+                        )
+                        tracksList.add(track)
+                    }
 
-                // Procesar tracks
-                val tracksArray = resp.getJSONArray("tracks")
-                val tracksList = mutableListOf<Track>()
-                for (k in 0 until tracksArray.length()) {
-                    val trackObject = tracksArray.getJSONObject(k)
-                    val track = Track(
-                        id = trackObject.getInt("id"),
-                        name = trackObject.getString("name"),
-                        duration = trackObject.getString("duration")
-                    )
-                    tracksList.add(track)
-                }
+                    // Procesar comments
+                    val commentsArray = resp.getJSONArray("comments")
+                    val commentsList = mutableListOf<Comment>()
+                    for (l in 0 until commentsArray.length()) {
+                        val commentObject = commentsArray.getJSONObject(l)
+                        val comment = Comment(
+                            id = commentObject.getInt("id"),
+                            description = commentObject.getString("description"),
+                            rating = commentObject.getString("rating")
+                        )
+                        commentsList.add(comment)
+                    }
 
-                // Procesar comments
-                val commentsArray = resp.getJSONArray("comments")
-                val commentsList = mutableListOf<Comment>()
-                for (l in 0 until commentsArray.length()) {
-                    val commentObject = commentsArray.getJSONObject(l)
-                    val comment = Comment(
-                        id = commentObject.getInt("id"),
-                        description = commentObject.getString("description"),
-                        rating = commentObject.getString("rating")
+                    // Crear el objeto album con toda la información
+                    val album = Album(
+                        id = resp.getInt("id"),
+                        name = resp.getString("name"),
+                        cover = resp.getString("cover"),
+                        recordLabel = resp.getString("recordLabel"),
+                        releaseDate = resp.getString("releaseDate"),
+                        genre = resp.getString("genre"),
+                        description = resp.getString("description"),
+                        performers = performersList,
+                        tracks = tracksList,
+                        comments = commentsList
                     )
-                    commentsList.add(comment)
-                }
 
-                val album = Album(
-                    id = resp.getInt("id"),
-                    name = resp.getString("name"),
-                    cover = resp.getString("cover"),
-                    recordLabel = resp.getString("recordLabel"),
-                    releaseDate = resp.getString("releaseDate"),
-                    genre = resp.getString("genre"),
-                    description = resp.getString("description"),
-                    performers = performersList,
-                    tracks = tracksList,
-                    comments = commentsList
-                )
-                onComplete(album)
+                    // Reanudar la ejecución con el objeto album
+                    cont.resume(album)
+                } catch (e: Exception) {
+                    // Manejar errores en el procesamiento de la respuesta
+                    cont.resumeWithException(e)
+                }
             },
-            {
-                onError(it)
-            }))
+            { error ->
+                // Si ocurre un error en la solicitud, reanudar con la excepción
+                cont.resumeWithException(error)
+            }
+        ))
     }
+
 
 
     private fun getRequest(path: String, responseListener: Response.Listener<String>, errorListener: Response.ErrorListener): StringRequest {
