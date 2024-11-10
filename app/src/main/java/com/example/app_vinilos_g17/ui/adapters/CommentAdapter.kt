@@ -1,5 +1,6 @@
 package com.example.app_vinilos_g17.ui.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ class CommentAdapter(private var comments: List<Comment>) : RecyclerView.Adapter
 
     override fun getItemCount(): Int = comments.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateComments(newComments: List<Comment>) {
         comments = newComments
         notifyDataSetChanged() // Notifica que los datos han cambiado

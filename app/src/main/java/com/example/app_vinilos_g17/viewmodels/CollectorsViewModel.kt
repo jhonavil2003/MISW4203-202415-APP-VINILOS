@@ -1,7 +1,6 @@
 package com.example.app_vinilos_g17.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.app_vinilos_g17.models.Collector
 import com.example.app_vinilos_g17.repositories.CollectorsRepository

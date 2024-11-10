@@ -8,9 +8,7 @@ import com.example.app_vinilos_g17.repositories.AlbumDetailRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Date
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AlbumDetailViewModel(application: Application, albumId: Int) : AndroidViewModel(application) {
 

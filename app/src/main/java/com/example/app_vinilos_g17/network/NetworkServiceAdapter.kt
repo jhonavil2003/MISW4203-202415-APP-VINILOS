@@ -8,6 +8,7 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.app_vinilos_g17.models.Album
+import com.example.app_vinilos_g17.models.AlbumList
 import com.example.app_vinilos_g17.models.Collector
 import com.example.app_vinilos_g17.models.Comment
 import com.example.app_vinilos_g17.models.Performer
@@ -34,81 +35,49 @@ class NetworkServiceAdapter(context: Context) {
         Volley.newRequestQueue(context.applicationContext)
     }
 
-    fun getAlbumList(onComplete: (resp: List<Album>) -> Unit, onError: (error: VolleyError) -> Unit) {
+    fun getAlbumList(onComplete: (resp: List<AlbumList>) -> Unit, onError: (error: VolleyError) -> Unit) {
         requestQueue.add(getRequest("albums",
             { response ->
                 val resp = JSONArray(response)
-                val list = mutableListOf<Album>()
+                val list = mutableListOf<AlbumList>()
+                var item: JSONObject? = null  // Variable reutilizable para cada iteración
+
                 for (i in 0 until resp.length()) {
-                    val item = resp.getJSONObject(i)
+                    item = resp.getJSONObject(i)  // Reutilizamos el espacio de memoria
+
+                    // Obtener solo los nombres de los intérpretes
                     val performersArray = item.getJSONArray("performers")
-                    val performersList = mutableListOf<Performer>()
-
+                    val performerNames = mutableListOf<String>()
                     for (j in 0 until performersArray.length()) {
-                        val performerObject = performersArray.getJSONObject(j)
-
-                        // Verificar si birthDate está presente
-                        val birthDate = if (performerObject.has("birthDate")) {
-                            performerObject.getString("birthDate")
-                        } else {
-                            "Fecha no disponible"
-                        }
-
-                        val performer = Performer(
-                            performerObject.getInt("id"),
-                            performerObject.getString("name"),
-                            performerObject.getString("image"),
-                            performerObject.getString("description"),
-                            birthDate
-                        )
-                        performersList.add(performer)
+                        performerNames.add(performersArray.getJSONObject(j).getString("name"))
                     }
 
-                    // Procesar tracks
-                    val tracksArray = item.getJSONArray("tracks")
-                    val tracksList = mutableListOf<Track>()
-                    for (k in 0 until tracksArray.length()) {
-                        val trackObject = tracksArray.getJSONObject(k)
-                        val track = Track(
-                            id = trackObject.getInt("id"),
-                            name = trackObject.getString("name"),
-                            duration = trackObject.getString("duration")
-                        )
-                        tracksList.add(track)
-                    }
-
-                    // Procesar comments
-                    val commentsArray = item.getJSONArray("comments")
-                    val commentsList = mutableListOf<Comment>()
-                    for (l in 0 until commentsArray.length()) {
-                        val commentObject = commentsArray.getJSONObject(l)
-                        val comment = Comment(
-                            id = commentObject.getInt("id"),
-                            description = commentObject.getString("description"),
-                            rating = commentObject.getString("rating")
-                        )
-                        commentsList.add(comment)
-                    }
-
-                    list.add(Album(
+                    // Crear un objeto AlbumList con los campos necesarios
+                    val albumList = AlbumList(
                         id = item.getInt("id"),
                         name = item.getString("name"),
                         cover = item.getString("cover"),
-                        recordLabel = item.getString("recordLabel"),
                         releaseDate = item.getString("releaseDate"),
-                        genre = item.getString("genre"),
-                        description = item.getString("description"),
-                        performers = performersList,
-                        tracks = tracksList,
-                        comments = commentsList
-                    ))
+                        performers = performerNames // Lista con los nombres de los intérpretes
+                    )
+
+                    // Agregar el álbum a la lista
+                    list.add(albumList)
                 }
+
+                // Llamar al callback onComplete con la lista de AlbumList
                 onComplete(list)
             },
-            {
-                onError(it)
-            }))
+            { error ->
+                // Llamar al callback onError si ocurre un error
+                onError(error)
+            })
+        )
     }
+
+
+
+
 
 
     suspend fun getAlbumDetail(albumId: Int): Album = suspendCoroutine { cont ->
@@ -194,21 +163,29 @@ class NetworkServiceAdapter(context: Context) {
         ))
     }
 
-    suspend fun getCollectors() = suspendCoroutine<List<Collector>>{ cont->
+    suspend fun getCollectors() = suspendCoroutine<List<Collector>> { cont ->
         requestQueue.add(getRequest("collectors",
             { response ->
                 val resp = JSONArray(response)
                 val list = mutableListOf<Collector>()
-                for (i in 0 until resp.length()) { //inicializado como variable de retorno
-                    val item = resp.getJSONObject(i)
-                    val collector = Collector(collectorId = item.getInt("id"),name = item.getString("name"), telephone = item.getString("telephone"), email = item.getString("email"))
-                    list.add(collector) //se agrega a medida que se procesa la respuesta
+                var item: JSONObject? = null // Variable reutilizable para cada iteración
+
+                for (i in 0 until resp.length()) {
+                    item = resp.getJSONObject(i) // Se reutiliza el espacio de memoria
+                    val collector = Collector(
+                        collectorId = item.getInt("id"),
+                        name = item.getString("name"),
+                        telephone = item.getString("telephone"),
+                        email = item.getString("email")
+                    )
+                    list.add(collector)
                 }
                 cont.resume(list)
             },
-            {
-                cont.resumeWithException(it)
-            }))
+            { error ->
+                cont.resumeWithException(error)
+            })
+        )
     }
 
 

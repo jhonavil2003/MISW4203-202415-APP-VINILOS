@@ -1,7 +1,7 @@
 package com.example.app_vinilos_g17.ui.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_vinilos_g17.databinding.ItemTrackBinding
@@ -20,6 +20,7 @@ class TrackAdapter(private var tracks: List<Track>) : RecyclerView.Adapter<Track
 
     override fun getItemCount(): Int = tracks.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateTracks(newTracks: List<Track>) {
         tracks = newTracks
         notifyDataSetChanged() // Notifica que los datos han cambiado

@@ -1,10 +1,10 @@
 package com.example.app_vinilos_g17.ui.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_vinilos_g17.R
 import com.example.app_vinilos_g17.databinding.CollectorItemBinding
@@ -13,6 +13,7 @@ import com.example.app_vinilos_g17.models.Collector
 class CollectorsAdapter : RecyclerView.Adapter<CollectorsAdapter.CollectorViewHolder>(){
 
     var collectors :List<Collector> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             notifyDataSetChanged()

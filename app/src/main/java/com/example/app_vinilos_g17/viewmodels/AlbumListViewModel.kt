@@ -6,17 +6,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.app_vinilos_g17.models.Album
+import com.example.app_vinilos_g17.models.AlbumList
 import com.example.app_vinilos_g17.repositories.AlbumListRepository
 
 class AlbumListViewModel(application: Application)  : AndroidViewModel(application) {
 
     private val albumListRepository = AlbumListRepository(application)
 
-    private val _albums = MutableLiveData<List<Album>>()
+    private val _albums = MutableLiveData<List<AlbumList>>()
     private val _isLoading = MutableLiveData(true)
 
-    val albums: LiveData<List<Album>>
+    val albums: LiveData<List<AlbumList>>
         get() = _albums
 
     val isLoading: LiveData<Boolean> get() = _isLoading

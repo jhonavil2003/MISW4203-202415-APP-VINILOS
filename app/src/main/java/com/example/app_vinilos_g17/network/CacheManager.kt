@@ -1,7 +1,6 @@
 package com.example.app_vinilos_g17.network
 
 import android.content.Context
-import android.util.Log
 import android.util.LruCache
 import com.example.app_vinilos_g17.models.Album
 import com.example.app_vinilos_g17.models.Collector
