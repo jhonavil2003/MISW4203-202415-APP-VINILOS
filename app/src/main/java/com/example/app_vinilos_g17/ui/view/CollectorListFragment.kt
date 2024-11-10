@@ -16,6 +16,7 @@ import com.example.app_vinilos_g17.models.Collector
 import com.example.app_vinilos_g17.viewmodels.CollectorsViewModel
 import com.example.app_vinilos_g17.ui.adapters.CollectorsAdapter
 
+@Suppress("DEPRECATION")
 class CollectorListFragment : Fragment() {
     private var _binding: FragmentCollectorListBinding? = null
     private val binding get() = _binding!!
@@ -39,6 +40,7 @@ class CollectorListFragment : Fragment() {
         recyclerView.adapter = viewModelAdapter
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val activity = requireNotNull(this.activity) {

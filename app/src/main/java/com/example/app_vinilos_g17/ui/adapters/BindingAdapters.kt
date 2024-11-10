@@ -9,7 +9,7 @@ import com.example.app_vinilos_g17.R
 
 @BindingAdapter("loadImage")
 fun loadImage(view: ImageView, url: String?) {
-    if (url != null && url.isNotEmpty()) {
+    if (!url.isNullOrEmpty()) {
         Glide.with(view.context)
             .load(url)
             .apply(

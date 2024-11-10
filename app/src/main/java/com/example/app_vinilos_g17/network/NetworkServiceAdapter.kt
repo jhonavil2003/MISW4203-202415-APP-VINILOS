@@ -42,7 +42,7 @@ class NetworkServiceAdapter(context: Context) {
             { response ->
                 val resp = JSONArray(response)
                 val list = mutableListOf<AlbumList>()
-                var item: JSONObject? = null // Variable reutilizable para cada iteración
+                var item: JSONObject?  // Variable reutilizable para cada iteración
 
                 for (i in 0 until resp.length()) {
                     item = resp.getJSONObject(i) // Se reutiliza el espacio de memoria
@@ -83,7 +83,7 @@ class NetworkServiceAdapter(context: Context) {
                     // Obtener la lista de performers
                     val performersArray = resp.getJSONArray("performers")
                     val performersList = mutableListOf<Performer>()
-                    var performerObject: JSONObject? = null // Variable reutilizable para cada iteración
+                    var performerObject: JSONObject?  // Variable reutilizable para cada iteración
 
                     for (j in 0 until performersArray.length()) {
                         performerObject = performersArray.getJSONObject(j) // Se reutiliza el espacio de memoria
@@ -108,7 +108,7 @@ class NetworkServiceAdapter(context: Context) {
                     // Procesar tracks
                     val tracksArray = resp.getJSONArray("tracks")
                     val tracksList = mutableListOf<Track>()
-                    var trackObject: JSONObject? = null // Variable reutilizable para cada iteración
+                    var trackObject: JSONObject?  // Variable reutilizable para cada iteración
 
                     for (k in 0 until tracksArray.length()) {
                         trackObject = tracksArray.getJSONObject(k) // Reutilizamos el espacio de memoria
@@ -124,7 +124,7 @@ class NetworkServiceAdapter(context: Context) {
                     // Procesar comments
                     val commentsArray = resp.getJSONArray("comments")
                     val commentsList = mutableListOf<Comment>()
-                    var commentObject: JSONObject? = null // Variable reutilizable para cada iteración
+                    var commentObject: JSONObject?  // Variable reutilizable para cada iteración
 
                     for (l in 0 until commentsArray.length()) {
                         commentObject = commentsArray.getJSONObject(l) // Reutilizamos el espacio de memoria
@@ -169,7 +169,7 @@ class NetworkServiceAdapter(context: Context) {
             { response ->
                 val resp = JSONArray(response)
                 val list = mutableListOf<Collector>()
-                var item: JSONObject? = null // Variable reutilizable para cada iteración
+                var item: JSONObject?  // Variable reutilizable para cada iteración
 
                 for (i in 0 until resp.length()) {
                     item = resp.getJSONObject(i) // Reutilizamos el espacio de memoria
