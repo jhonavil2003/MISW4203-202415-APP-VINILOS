@@ -1,5 +1,6 @@
-package com.example.app_vinilos_g17.ui.view
+package com.example.app_vinilos_g17.ui.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ class PerformerAdapter : RecyclerView.Adapter<PerformerAdapter.PerformerViewHold
 
     private var performers: List<Performer> = emptyList()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updatePerformers(newPerformers: List<Performer>) {
         performers = newPerformers
         notifyDataSetChanged()

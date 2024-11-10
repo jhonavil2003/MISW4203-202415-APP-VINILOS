@@ -68,7 +68,9 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
 
     implementation("com.github.bumptech.glide:glide:4.13.2")
-    kapt("com.github.bumptech.glide:compiler:4.13.2") // Para el procesamiento de anotaciones
+    annotationProcessor("com.github.bumptech.glide:compiler:4.13.2")
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

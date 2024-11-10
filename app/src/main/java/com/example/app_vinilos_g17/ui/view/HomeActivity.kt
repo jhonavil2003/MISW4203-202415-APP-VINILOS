@@ -13,7 +13,6 @@ import com.example.app_vinilos_g17.R
 import com.example.app_vinilos_g17.databinding.ActivityHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
@@ -25,10 +24,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(view)
 
         val navView: BottomNavigationView = binding.navView
-
         val navController = findNavController(R.id.nav_host_fragment_activity_home)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_albums, R.id.navigation_artists, R.id.navigation_collectors
@@ -38,16 +34,22 @@ class HomeActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         val actionBar: ActionBar? = supportActionBar
-
-
-        // Define ColorDrawable object and parse color
-        // using parseColor method
-        // with color hash code as its parameter
         val colorDrawable = ColorDrawable(Color.parseColor("#3D0F5E"))
-
-
-        // Set BackgroundDrawable
         actionBar?.setBackgroundDrawable(colorDrawable)
+
+        navView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_albums -> {
+                    navController.popBackStack(R.id.navigation_albums, false)
+                    navController.navigate(R.id.navigation_albums)
+                    true
+                }
+                else -> {
+                    navController.navigate(item.itemId)
+                    true
+                }
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

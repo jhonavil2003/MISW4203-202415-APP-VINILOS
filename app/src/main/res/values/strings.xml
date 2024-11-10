@@ -1,19 +1,27 @@
 <resources>
     <string name="app_name">APP-VINILOS-G17</string>
     <string name="app_description">Aplicación para amantes de los vinilos. Acá podrás encontrar álbumes, artistas y coleccionistas</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="title_albums">Álbumes</string>
     <string name="title_artists">Artistas</string>
     <string name="title_collectors">Coleccionistas</string>
-
-    <string name="album_name_placeholder">Nombre del album</string>
-    <string name="album_description_placeholder">Descripcion del album</string>
 
     <string name="logo">Logo de la aplicación</string>
     <string name="visitor">Visitante</string>
     <string name="collector">Coleccionista</string>
 
     <string name="ingreso">Ingresar como: </string>
+    <string name="descripcion_imagen">Imagen del album</string>
+    <string name="imagen_performer">Imagen performer</string>
+    <string name="fecha_de_publicaci_n">Fecha de publicación:</string>
+    <string name="g_nero">Género:</string>
+    <string name="sello">Sello:</string>
+    <string name="int_rpretes">Intérpretes</string>
+    <string name="pistas">Pistas</string>
+    <string name="no_hay_tracks_disponibles">No hay tracks disponibles</string>
+    <string name="comentarios">Comentarios</string>
+    <string name="no_hay_comentarios">No hay comentarios</string>
+    <string name="space">.</string>
+    <string name="rating">Rating:</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.app_vinilos_g17.ui.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -8,12 +9,13 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_vinilos_g17.R
 import com.example.app_vinilos_g17.databinding.AlbumItemBinding
-import com.example.app_vinilos_g17.models.Album
+import com.example.app_vinilos_g17.models.AlbumList
 import com.example.app_vinilos_g17.ui.view.AlbumListFragmentDirections
 
 class AlbumListAdapter : RecyclerView.Adapter<AlbumListAdapter.AlbumViewHolder>(){
 
-    var albums :List<Album> = emptyList()
+    var albums :List<AlbumList> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             notifyDataSetChanged()

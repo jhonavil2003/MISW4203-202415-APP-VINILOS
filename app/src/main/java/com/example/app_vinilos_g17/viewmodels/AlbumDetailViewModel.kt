@@ -8,6 +8,7 @@ import com.example.app_vinilos_g17.repositories.AlbumDetailRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Date
+import kotlinx.coroutines.launch
 
 class AlbumDetailViewModel(application: Application, albumId: Int) : AndroidViewModel(application) {
 
@@ -27,14 +28,23 @@ class AlbumDetailViewModel(application: Application, albumId: Int) : AndroidView
     }
 
     private fun fetchAlbumDetails(albumId: Int) {
-        albumRepository.getAlbumDetail(albumId, { fetchedAlbum ->
-            val formattedAlbum = fetchedAlbum.copy(releaseDate = formatReleaseDate(fetchedAlbum.releaseDate))
-            _album.postValue(formattedAlbum)
-            _eventNetworkError.value = false
-        }, { error ->
-            Log.d("NetworkError", error.toString())
-            _eventNetworkError.value = true
-        })
+        // Usamos viewModelScope para ejecutar la tarea en una corutina
+        viewModelScope.launch {
+            try {
+                // Llamamos a la función suspensiva en el repositorio para obtener el detalle del álbum
+                val fetchedAlbum = albumRepository.getAlbumDetail(albumId)
+                // Formateamos la fecha
+                val formattedAlbum = fetchedAlbum.copy(releaseDate = formatReleaseDate(fetchedAlbum.releaseDate))
+                // Actualizamos el LiveData con los datos
+                _album.postValue(formattedAlbum)
+                // Indicamos que no hubo error
+                _eventNetworkError.value = false
+            } catch (error: Exception) {
+                // En caso de error, mostramos un mensaje y actualizamos el estado de error
+                Log.d("NetworkError", error.toString())
+                _eventNetworkError.value = true
+            }
+        }
     }
 
     private fun formatReleaseDate(dateString: String): String {
