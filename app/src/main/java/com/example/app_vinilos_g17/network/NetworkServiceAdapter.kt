@@ -20,9 +20,11 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class NetworkServiceAdapter(context: Context) {
+
     companion object {
         const val BASE_URL = "https://blackvynils-827885dbcaa3.herokuapp.com/"
         var instance: NetworkServiceAdapter? = null
+
         fun getInstance(context: Context) =
             instance ?: synchronized(this) {
                 instance ?: NetworkServiceAdapter(context).also {
@@ -40,10 +42,10 @@ class NetworkServiceAdapter(context: Context) {
             { response ->
                 val resp = JSONArray(response)
                 val list = mutableListOf<AlbumList>()
-                var item: JSONObject? = null  // Variable reutilizable para cada iteración
+                var item: JSONObject? = null // Variable reutilizable para cada iteración
 
                 for (i in 0 until resp.length()) {
-                    item = resp.getJSONObject(i)  // Reutilizamos el espacio de memoria
+                    item = resp.getJSONObject(i) // Se reutiliza el espacio de memoria
 
                     // Obtener solo los nombres de los intérpretes
                     val performersArray = item.getJSONArray("performers")
@@ -53,33 +55,25 @@ class NetworkServiceAdapter(context: Context) {
                     }
 
                     // Crear un objeto AlbumList con los campos necesarios
-                    val albumList = AlbumList(
-                        id = item.getInt("id"),
-                        name = item.getString("name"),
-                        cover = item.getString("cover"),
-                        releaseDate = item.getString("releaseDate"),
-                        performers = performerNames // Lista con los nombres de los intérpretes
+                    list.add(
+                        AlbumList(
+                            id = item.getInt("id"),
+                            name = item.getString("name"),
+                            cover = item.getString("cover"),
+                            releaseDate = item.getString("releaseDate"),
+                            performers = performerNames // Lista con los nombres de los intérpretes
+                        )
                     )
-
-                    // Agregar el álbum a la lista
-                    list.add(albumList)
                 }
-
-                // Llamar al callback onComplete con la lista de AlbumList
                 onComplete(list)
             },
             { error ->
-                // Llamar al callback onError si ocurre un error
                 onError(error)
             })
         )
     }
 
-
-
-
-
-
+    // Optimización del método para obtener detalles de un álbum
     suspend fun getAlbumDetail(albumId: Int): Album = suspendCoroutine { cont ->
         requestQueue.add(getRequest("albums/$albumId",
             { response ->
@@ -89,9 +83,10 @@ class NetworkServiceAdapter(context: Context) {
                     // Obtener la lista de performers
                     val performersArray = resp.getJSONArray("performers")
                     val performersList = mutableListOf<Performer>()
+                    var performerObject: JSONObject? = null // Variable reutilizable para cada iteración
 
                     for (j in 0 until performersArray.length()) {
-                        val performerObject = performersArray.getJSONObject(j)
+                        performerObject = performersArray.getJSONObject(j) // Se reutiliza el espacio de memoria
 
                         val birthDate = if (performerObject.has("birthDate")) {
                             performerObject.getString("birthDate")
@@ -106,14 +101,18 @@ class NetworkServiceAdapter(context: Context) {
                             description = performerObject.getString("description"),
                             birthDate = birthDate
                         )
+
                         performersList.add(performer)
                     }
 
                     // Procesar tracks
                     val tracksArray = resp.getJSONArray("tracks")
                     val tracksList = mutableListOf<Track>()
+                    var trackObject: JSONObject? = null // Variable reutilizable para cada iteración
+
                     for (k in 0 until tracksArray.length()) {
-                        val trackObject = tracksArray.getJSONObject(k)
+                        trackObject = tracksArray.getJSONObject(k) // Reutilizamos el espacio de memoria
+
                         val track = Track(
                             id = trackObject.getInt("id"),
                             name = trackObject.getString("name"),
@@ -125,13 +124,17 @@ class NetworkServiceAdapter(context: Context) {
                     // Procesar comments
                     val commentsArray = resp.getJSONArray("comments")
                     val commentsList = mutableListOf<Comment>()
+                    var commentObject: JSONObject? = null // Variable reutilizable para cada iteración
+
                     for (l in 0 until commentsArray.length()) {
-                        val commentObject = commentsArray.getJSONObject(l)
+                        commentObject = commentsArray.getJSONObject(l) // Reutilizamos el espacio de memoria
+
                         val comment = Comment(
                             id = commentObject.getInt("id"),
                             description = commentObject.getString("description"),
                             rating = commentObject.getString("rating")
                         )
+
                         commentsList.add(comment)
                     }
 
@@ -152,12 +155,10 @@ class NetworkServiceAdapter(context: Context) {
                     // Reanudar la ejecución con el objeto album
                     cont.resume(album)
                 } catch (e: Exception) {
-                    // Manejar errores en el procesamiento de la respuesta
                     cont.resumeWithException(e)
                 }
             },
             { error ->
-                // Si ocurre un error en la solicitud, reanudar con la excepción
                 cont.resumeWithException(error)
             }
         ))
@@ -171,7 +172,8 @@ class NetworkServiceAdapter(context: Context) {
                 var item: JSONObject? = null // Variable reutilizable para cada iteración
 
                 for (i in 0 until resp.length()) {
-                    item = resp.getJSONObject(i) // Se reutiliza el espacio de memoria
+                    item = resp.getJSONObject(i) // Reutilizamos el espacio de memoria
+
                     val collector = Collector(
                         collectorId = item.getInt("id"),
                         name = item.getString("name"),
@@ -180,6 +182,7 @@ class NetworkServiceAdapter(context: Context) {
                     )
                     list.add(collector)
                 }
+
                 cont.resume(list)
             },
             { error ->
@@ -187,8 +190,6 @@ class NetworkServiceAdapter(context: Context) {
             })
         )
     }
-
-
 
     private fun getRequest(path: String, responseListener: Response.Listener<String>, errorListener: Response.ErrorListener): StringRequest {
         return StringRequest(Request.Method.GET, BASE_URL + path, responseListener, errorListener)
