@@ -1,4 +1,4 @@
-package com.example.app_vinilos_g17.ui.view
+package com.example.app_vinilos_g17.ui.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

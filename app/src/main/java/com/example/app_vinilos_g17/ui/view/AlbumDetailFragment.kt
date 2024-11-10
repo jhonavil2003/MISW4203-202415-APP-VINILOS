@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.app_vinilos_g17.databinding.FragmentAlbumDetailBinding
 import com.example.app_vinilos_g17.ui.adapters.TrackAdapter
 import com.example.app_vinilos_g17.ui.adapters.CommentAdapter
+import com.example.app_vinilos_g17.ui.adapters.PerformerAdapter
 import com.example.app_vinilos_g17.viewmodels.AlbumDetailViewModel
 
 class AlbumDetailFragment : Fragment() {
@@ -38,46 +39,46 @@ class AlbumDetailFragment : Fragment() {
         viewModel = ViewModelProvider(this, AlbumDetailViewModel.Factory(requireActivity().application, albumId)).get(
             AlbumDetailViewModel::class.java)
 
-        // Inicializa el RecyclerView para intérpretes
+
         binding.recyclerViewPerformers.layoutManager = LinearLayoutManager(context)
-        performerAdapter = PerformerAdapter() // Inicializa el Adapter vacío
+        performerAdapter = PerformerAdapter()
         binding.recyclerViewPerformers.adapter = performerAdapter
 
-        // Inicializa el RecyclerView para pistas
+
         binding.recyclerViewTracks.layoutManager = LinearLayoutManager(context)
-        trackAdapter = TrackAdapter(emptyList()) // Inicializa el Adapter vacío
+        trackAdapter = TrackAdapter(emptyList())
         binding.recyclerViewTracks.adapter = trackAdapter
 
-        // Inicializa el RecyclerView para comentarios
+
         binding.recyclerViewComments.layoutManager = LinearLayoutManager(context)
-        commentAdapter = CommentAdapter(emptyList()) // Inicializa el Adapter vacío
+        commentAdapter = CommentAdapter(emptyList())
         binding.recyclerViewComments.adapter = commentAdapter
 
         viewModel.album.observe(viewLifecycleOwner) { album ->
             binding.album = album
             (activity as? AppCompatActivity)?.supportActionBar?.title = album.name
 
-            // Actualiza la lista de intérpretes
+
             performerAdapter.updatePerformers(album.performers)
 
-            // Maneja la visibilidad de los tracks
+
             if (album.tracks.isEmpty()) {
                 binding.textViewNoTracks.visibility = View.VISIBLE
                 binding.recyclerViewTracks.visibility = View.GONE
             } else {
                 binding.textViewNoTracks.visibility = View.GONE
                 binding.recyclerViewTracks.visibility = View.VISIBLE
-                trackAdapter.updateTracks(album.tracks) // Actualiza el Adapter con las pistas
+                trackAdapter.updateTracks(album.tracks)
             }
 
-            // Maneja la visibilidad de los comentarios
+
             if (album.comments.isEmpty()) {
                 binding.textViewNoComments.visibility = View.VISIBLE
                 binding.recyclerViewComments.visibility = View.GONE
             } else {
                 binding.textViewNoComments.visibility = View.GONE
                 binding.recyclerViewComments.visibility = View.VISIBLE
-                commentAdapter.updateComments(album.comments) // Actualiza el Adapter con los comentarios
+                commentAdapter.updateComments(album.comments)
             }
         }
 
