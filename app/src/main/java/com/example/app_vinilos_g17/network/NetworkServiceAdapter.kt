@@ -37,40 +37,47 @@ class NetworkServiceAdapter(context: Context) {
         Volley.newRequestQueue(context.applicationContext)
     }
 
-    fun getAlbumList(onComplete: (resp: List<AlbumList>) -> Unit, onError: (error: VolleyError) -> Unit) {
+    suspend fun getAlbumList() = suspendCoroutine<List<AlbumList>> { cont ->
         requestQueue.add(getRequest("albums",
             { response ->
-                val resp = JSONArray(response)
-                val list = mutableListOf<AlbumList>()
-                var item: JSONObject?  // Variable reutilizable para cada iteración
+                try {
+                    val resp = JSONArray(response)
+                    val list = mutableListOf<AlbumList>()
+                    var item: JSONObject?  // Variable reutilizable para cada iteración
 
-                for (i in 0 until resp.length()) {
-                    item = resp.getJSONObject(i) // Se reutiliza el espacio de memoria
+                    for (i in 0 until resp.length()) {
+                        item = resp.getJSONObject(i) // Se reutiliza el espacio de memoria
 
-                    // Obtener solo los nombres de los intérpretes
-                    val performersArray = item.getJSONArray("performers")
-                    val performerNames = mutableListOf<String>()
-                    for (j in 0 until performersArray.length()) {
-                        performerNames.add(performersArray.getJSONObject(j).getString("name"))
-                    }
+                        // Obtener solo los nombres de los intérpretes
+                        val performersArray = item.getJSONArray("performers")
+                        val performerNames = mutableListOf<String>()
+                        for (j in 0 until performersArray.length()) {
+                            performerNames.add(
+                                performersArray.getJSONObject(j).getString("name")
+                            )
+                        }
 
-                    // Crear un objeto AlbumList con los campos necesarios
-                    list.add(
-                        AlbumList(
-                            id = item.getInt("id"),
-                            name = item.getString("name"),
-                            cover = item.getString("cover"),
-                            releaseDate = item.getString("releaseDate"),
-                            performers = performerNames // Lista con los nombres de los intérpretes
+                        // Crear un objeto AlbumList con los campos necesarios
+                        list.add(
+                            AlbumList(
+                                id = item.getInt("id"),
+                                name = item.getString("name"),
+                                cover = item.getString("cover"),
+                                releaseDate = item.getString("releaseDate"),
+                                performers = performerNames // Lista con los nombres de los intérpretes
+                            )
                         )
-                    )
+                    }
+                    // Reanudar la ejecución con el objeto album
+                    cont.resume(list)
+                } catch (e: Exception) {
+                    cont.resumeWithException(e)
                 }
-                onComplete(list)
             },
             { error ->
-                onError(error)
-            })
-        )
+                cont.resumeWithException(error)
+            }
+        ))
     }
 
     // Optimización del método para obtener detalles de un álbum
@@ -86,7 +93,8 @@ class NetworkServiceAdapter(context: Context) {
                     var performerObject: JSONObject?  // Variable reutilizable para cada iteración
 
                     for (j in 0 until performersArray.length()) {
-                        performerObject = performersArray.getJSONObject(j) // Se reutiliza el espacio de memoria
+                        performerObject =
+                            performersArray.getJSONObject(j) // Se reutiliza el espacio de memoria
 
                         val birthDate = if (performerObject.has("birthDate")) {
                             performerObject.getString("birthDate")
@@ -111,7 +119,8 @@ class NetworkServiceAdapter(context: Context) {
                     var trackObject: JSONObject?  // Variable reutilizable para cada iteración
 
                     for (k in 0 until tracksArray.length()) {
-                        trackObject = tracksArray.getJSONObject(k) // Reutilizamos el espacio de memoria
+                        trackObject =
+                            tracksArray.getJSONObject(k) // Reutilizamos el espacio de memoria
 
                         val track = Track(
                             id = trackObject.getInt("id"),
@@ -127,7 +136,8 @@ class NetworkServiceAdapter(context: Context) {
                     var commentObject: JSONObject?  // Variable reutilizable para cada iteración
 
                     for (l in 0 until commentsArray.length()) {
-                        commentObject = commentsArray.getJSONObject(l) // Reutilizamos el espacio de memoria
+                        commentObject =
+                            commentsArray.getJSONObject(l) // Reutilizamos el espacio de memoria
 
                         val comment = Comment(
                             id = commentObject.getInt("id"),
@@ -165,33 +175,38 @@ class NetworkServiceAdapter(context: Context) {
     }
 
     suspend fun getCollectors() = suspendCoroutine<List<Collector>> { cont ->
-        requestQueue.add(getRequest("collectors",
-            { response ->
-                val resp = JSONArray(response)
-                val list = mutableListOf<Collector>()
-                var item: JSONObject?  // Variable reutilizable para cada iteración
+        requestQueue.add(
+            getRequest("collectors",
+                { response ->
+                    val resp = JSONArray(response)
+                    val list = mutableListOf<Collector>()
+                    var item: JSONObject?  // Variable reutilizable para cada iteración
 
-                for (i in 0 until resp.length()) {
-                    item = resp.getJSONObject(i) // Reutilizamos el espacio de memoria
+                    for (i in 0 until resp.length()) {
+                        item = resp.getJSONObject(i) // Reutilizamos el espacio de memoria
 
-                    val collector = Collector(
-                        collectorId = item.getInt("id"),
-                        name = item.getString("name"),
-                        telephone = item.getString("telephone"),
-                        email = item.getString("email")
-                    )
-                    list.add(collector)
-                }
+                        val collector = Collector(
+                            collectorId = item.getInt("id"),
+                            name = item.getString("name"),
+                            telephone = item.getString("telephone"),
+                            email = item.getString("email")
+                        )
+                        list.add(collector)
+                    }
 
-                cont.resume(list)
-            },
-            { error ->
-                cont.resumeWithException(error)
-            })
+                    cont.resume(list)
+                },
+                { error ->
+                    cont.resumeWithException(error)
+                })
         )
     }
 
-    private fun getRequest(path: String, responseListener: Response.Listener<String>, errorListener: Response.ErrorListener): StringRequest {
+    private fun getRequest(
+        path: String,
+        responseListener: Response.Listener<String>,
+        errorListener: Response.ErrorListener
+    ): StringRequest {
         return StringRequest(Request.Method.GET, BASE_URL + path, responseListener, errorListener)
     }
 }
