@@ -9,7 +9,7 @@ import com.example.app_vinilos_g17.models.Collector
 class CacheManager(context: Context) {
 
     companion object {
-        const val DEFATUL_ALBUM_LIST_ID : Int= 0
+        const val DEFAULT_ALBUM_LIST_ID : Int= 0
 
         private var instance: CacheManager? = null
 
@@ -28,11 +28,11 @@ class CacheManager(context: Context) {
     private var albumListCache: LruCache<Int, List<AlbumList>> = LruCache(1)
 
     fun getAlbumList():  List<AlbumList>? {
-        return albumListCache.get(DEFATUL_ALBUM_LIST_ID)
+        return albumListCache.get(DEFAULT_ALBUM_LIST_ID)
     }
 
     fun addAlbumList(albumList: List<AlbumList>) {
-        albumListCache.put(DEFATUL_ALBUM_LIST_ID, albumList)
+        albumListCache.put(DEFAULT_ALBUM_LIST_ID, albumList)
     }
 
     fun addAlbumDetails(albumId: Int, album: Album) {
