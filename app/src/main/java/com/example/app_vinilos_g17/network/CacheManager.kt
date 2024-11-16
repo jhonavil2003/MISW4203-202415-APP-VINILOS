@@ -3,11 +3,14 @@ package com.example.app_vinilos_g17.network
 import android.content.Context
 import android.util.LruCache
 import com.example.app_vinilos_g17.models.Album
+import com.example.app_vinilos_g17.models.AlbumList
 import com.example.app_vinilos_g17.models.Collector
 
 class CacheManager(context: Context) {
 
     companion object {
+        val DEFATUL_ALBUM_LIST_ID : Int= 0;
+
         private var instance: CacheManager? = null
 
         fun getInstance(context: Context): CacheManager {
@@ -19,8 +22,18 @@ class CacheManager(context: Context) {
         }
     }
 
-    //LruCache para detalle de album
     private var albumCache: LruCache<Int, Album> = LruCache(10)
+
+    // Se crea solo un registro de caché de listado de albumes.
+    private var albumListCache: LruCache<Int, List<AlbumList>> = LruCache(1)
+
+    fun getAlbumList():  List<AlbumList>? {
+        return albumListCache.get(DEFATUL_ALBUM_LIST_ID)
+    }
+
+    fun addAlbumList(albumList: List<AlbumList>) {
+        albumListCache.put(DEFATUL_ALBUM_LIST_ID, albumList)
+    }
 
     fun addAlbumDetails(albumId: Int, album: Album) {
         albumCache.put(albumId, album)
