@@ -9,7 +9,7 @@ import com.example.app_vinilos_g17.models.Collector
 class CacheManager(context: Context) {
 
     companion object {
-        val DEFATUL_ALBUM_LIST_ID : Int= 0;
+        const val DEFATUL_ALBUM_LIST_ID : Int= 0
 
         private var instance: CacheManager? = null
 

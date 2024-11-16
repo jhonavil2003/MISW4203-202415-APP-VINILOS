@@ -48,14 +48,14 @@ class CollectorListFragment : Fragment() {
         }
         activity.actionBar?.title = getString(R.string.title_collectors)
         viewModel = ViewModelProvider(this, CollectorsViewModel.Factory(activity.application)).get(CollectorsViewModel::class.java)
-        viewModel.collectors.observe(viewLifecycleOwner, Observer<List<Collector>> {
+        viewModel.collectors.observe(viewLifecycleOwner) {
             it.apply {
                 viewModelAdapter!!.collectors = this
             }
-        })
-        viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> { isNetworkError ->
+        }
+        viewModel.eventNetworkError.observe(viewLifecycleOwner) { isNetworkError ->
             if (isNetworkError) onNetworkError()
-        })
+        }
     }
     override fun onDestroyView() {
         super.onDestroyView()

@@ -44,20 +44,21 @@ class AlbumListFragment : Fragment() {
             adapter = viewModelAdapter
         }
 
-        viewModel.albums.observe(viewLifecycleOwner, Observer { albums ->
+        viewModel.albums.observe(viewLifecycleOwner) { albums ->
             albums?.let {
                 viewModelAdapter.albums = it // Actualiza el adaptador con los nuevos datos
             }
-        })
+        }
 
-        viewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.albumsRv.visibility = if (isLoading) View.GONE else View.VISIBLE // Oculta el RecyclerView mientras carga
-        })
+            binding.albumsRv.visibility =
+                if (isLoading) View.GONE else View.VISIBLE // Oculta el RecyclerView mientras carga
+        }
 
-        viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer { isNetworkError ->
+        viewModel.eventNetworkError.observe(viewLifecycleOwner) { isNetworkError ->
             if (isNetworkError) onNetworkError()
-        })
+        }
     }
 
     override fun onDestroyView() {
