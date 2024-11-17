@@ -17,11 +17,10 @@ class AlbumDetailViewModel(application: Application, albumId: Int) : AndroidView
     private val _album = MutableLiveData<Album>()
     val album: LiveData<Album> get() = _album
 
-    private val _eventNetworkError = MutableLiveData<Boolean>(false)
+    private val _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
 
-    private val _isNetworkErrorShown = MutableLiveData<Boolean>(false)
-    val isNetworkErrorShown: LiveData<Boolean> get() = _isNetworkErrorShown
+    private val _isNetworkErrorShown = MutableLiveData(false)
 
     init {
         fetchAlbumDetails(albumId)
