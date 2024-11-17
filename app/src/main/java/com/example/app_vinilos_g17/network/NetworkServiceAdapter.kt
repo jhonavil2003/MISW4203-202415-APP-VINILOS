@@ -12,6 +12,9 @@ import com.example.app_vinilos_g17.models.Collector
 import com.example.app_vinilos_g17.models.Comment
 import com.example.app_vinilos_g17.models.Performer
 import com.example.app_vinilos_g17.models.Track
+import com.example.app_vinilos_g17.models.Artist
+import com.example.app_vinilos_g17.models.SimpleAlbum
+import com.example.app_vinilos_g17.models.PerformerPrize
 import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.coroutines.resume
@@ -199,6 +202,69 @@ class NetworkServiceAdapter(context: Context) {
                     cont.resumeWithException(error)
                 })
         )
+    }
+
+    suspend fun getArtists() = suspendCoroutine<List<Artist>> { cont ->
+        requestQueue.add(getRequest("musicians",
+            { response ->
+                try {
+                    val artistArray = JSONArray(response)
+                    val artistList = mutableListOf<Artist>()
+                    var artistObject: JSONObject?  // Variable reutilizable para cada iteración
+
+                    for (i in 0 until artistArray.length()) {
+                        artistObject = artistArray.getJSONObject(i)
+
+                        val albumArray = artistObject.getJSONArray("albums")
+                        val albumList = mutableListOf<SimpleAlbum>()
+                        var albumObject: JSONObject?  // Variable reutilizable para cada iteración
+
+                        for (j in 0 until albumArray.length()) {
+                            albumObject = albumArray.getJSONObject(j)
+
+                            val album = SimpleAlbum(
+                                albumObject.getInt("id"),
+                                albumObject.getString("name"),
+                                albumObject.getString("cover"),
+                                albumObject.getString("description"),
+                                albumObject.getString("genre"),
+                                albumObject.getString("recordLabel")
+                            )
+                            albumList.add(album)
+                        }
+
+                        val performerPrizeArray = artistObject.getJSONArray("performerPrizes")
+                        val performerPrizeList = mutableListOf<PerformerPrize>()
+                        var performerPrizeObject: JSONObject?  // Variable reutilizable para cada iteración
+
+                        for (k in 0 until performerPrizeArray.length()) {
+                            performerPrizeObject = performerPrizeArray.getJSONObject(k)
+
+                            val performerPrize = PerformerPrize(
+                                performerPrizeObject.getInt("id"),
+                                performerPrizeObject.getString("premiationDate"),
+                            )
+                            performerPrizeList.add(performerPrize)
+                        }
+
+                        artistList.add(i, Artist(
+                            id = artistObject.getInt("id"),
+                            name = artistObject.getString("name"),
+                            image = artistObject.getString("image"),
+                            description = artistObject.getString("description"),
+                            birthDate = artistObject.getString("birthDate"),
+                            albums = albumList,
+                            performerPrizes = performerPrizeList)
+                        )
+                    }
+                    cont.resume(artistList)
+                } catch (e: Exception) {
+                    cont.resumeWithException(e)
+                }
+            },
+            { error ->
+                cont.resumeWithException(error)
+            }))
     }
 
     private fun getRequest(

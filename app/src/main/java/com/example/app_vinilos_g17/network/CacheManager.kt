@@ -5,11 +5,14 @@ import android.util.LruCache
 import com.example.app_vinilos_g17.models.Album
 import com.example.app_vinilos_g17.models.AlbumList
 import com.example.app_vinilos_g17.models.Collector
+import com.example.app_vinilos_g17.models.Artist
 
 class CacheManager(context: Context) {
 
     companion object {
         const val DEFAULT_ALBUM_LIST_ID : Int= 0
+
+        const val DEFAULT_ARTIST_LIST_ID : Int= 0
 
         private var instance: CacheManager? = null
 
@@ -54,5 +57,14 @@ class CacheManager(context: Context) {
             return cachedCollectors
         }
         return emptyList()
+    }
+
+    // Se crea solo un registro de caché de listado de artistas
+    private var artistListCache: LruCache<Int, List<Artist>> = LruCache(1)
+    fun getArtists():  List<Artist>? {
+        return artistListCache.get(DEFAULT_ARTIST_LIST_ID)
+    }
+    fun addArtists(artistList: List<Artist>) {
+        artistListCache.put(DEFAULT_ARTIST_LIST_ID, artistList)
     }
 }
