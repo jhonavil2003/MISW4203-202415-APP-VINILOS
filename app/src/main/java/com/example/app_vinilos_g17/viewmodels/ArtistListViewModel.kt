@@ -1,15 +1,22 @@
 package com.example.app_vinilos_g17.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.app_vinilos_g17.models.Artist
 import com.example.app_vinilos_g17.repositories.ArtistRepository
+import kotlinx.coroutines.launch
 
 class ArtistListViewModel(application: Application): AndroidViewModel(application) {
+
+    companion object {
+        private const val TAG = "ArtistListViewModel"
+    }
 
     private val artistRepository = ArtistRepository(application)
 
@@ -37,15 +44,20 @@ class ArtistListViewModel(application: Application): AndroidViewModel(applicatio
     }
 
     private fun refreshDataFromNetwork() {
-        _isLoading.value = true
-        artistRepository.refreshData({
-            _artists.postValue(it)
-            _eventNetworkError.value = false
-            _isNetworkErrorShown.value = false
-            _isLoading.value = false
-        },{
-            _eventNetworkError.value = true
-        })
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                val fetchedArtistList = artistRepository.getArtists()
+                _artists.postValue(fetchedArtistList)
+
+                _eventNetworkError.value = false
+                _isLoading.value = false
+            }
+            catch (error: Exception) {
+                Log.d(TAG, error.toString())
+                _eventNetworkError.value = true
+            }
+        }
     }
 
     fun onNetworkErrorShown() {

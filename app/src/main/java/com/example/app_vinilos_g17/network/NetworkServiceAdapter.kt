@@ -4,7 +4,6 @@ import android.content.Context
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.app_vinilos_g17.models.Album
@@ -205,59 +204,66 @@ class NetworkServiceAdapter(context: Context) {
         )
     }
 
-    fun getArtists(onComplete: (resp: List<Artist>) -> Unit, onError: (error: VolleyError) -> Unit) {
+    suspend fun getArtists() = suspendCoroutine<List<Artist>> { cont ->
         requestQueue.add(getRequest("musicians",
             { response ->
-                val artistArray = JSONArray(response)
-                val artistList = mutableListOf<Artist>()
+                try {
+                    val artistArray = JSONArray(response)
+                    val artistList = mutableListOf<Artist>()
+                    var artistObject: JSONObject?  // Variable reutilizable para cada iteración
 
-                for (i in 0 until artistArray.length()) {
-                    val artistObject = artistArray.getJSONObject(i)
+                    for (i in 0 until artistArray.length()) {
+                        artistObject = artistArray.getJSONObject(i)
 
-                    val albumArray = artistObject.getJSONArray("albums")
-                    val albumList = mutableListOf<SimpleAlbum>()
+                        val albumArray = artistObject.getJSONArray("albums")
+                        val albumList = mutableListOf<SimpleAlbum>()
+                        var albumObject: JSONObject?  // Variable reutilizable para cada iteración
 
-                    for (j in 0 until albumArray.length()) {
-                        val albumObject = albumArray.getJSONObject(j)
+                        for (j in 0 until albumArray.length()) {
+                            albumObject = albumArray.getJSONObject(j)
 
-                        val album = SimpleAlbum(
-                            albumObject.getInt("id"),
-                            albumObject.getString("name"),
-                            albumObject.getString("cover"),
-                            albumObject.getString("description"),
-                            albumObject.getString("genre"),
-                            albumObject.getString("recordLabel")
+                            val album = SimpleAlbum(
+                                albumObject.getInt("id"),
+                                albumObject.getString("name"),
+                                albumObject.getString("cover"),
+                                albumObject.getString("description"),
+                                albumObject.getString("genre"),
+                                albumObject.getString("recordLabel")
+                            )
+                            albumList.add(album)
+                        }
+
+                        val performerPrizeArray = artistObject.getJSONArray("performerPrizes")
+                        val performerPrizeList = mutableListOf<PerformerPrize>()
+                        var performerPrizeObject: JSONObject?  // Variable reutilizable para cada iteración
+
+                        for (k in 0 until performerPrizeArray.length()) {
+                            performerPrizeObject = performerPrizeArray.getJSONObject(k)
+
+                            val performerPrize = PerformerPrize(
+                                performerPrizeObject.getInt("id"),
+                                performerPrizeObject.getString("premiationDate"),
+                            )
+                            performerPrizeList.add(performerPrize)
+                        }
+
+                        artistList.add(i, Artist(
+                            id = artistObject.getInt("id"),
+                            name = artistObject.getString("name"),
+                            image = artistObject.getString("image"),
+                            description = artistObject.getString("description"),
+                            birthDate = artistObject.getString("birthDate"),
+                            albums = albumList,
+                            performerPrizes = performerPrizeList)
                         )
-                        albumList.add(album)
                     }
-
-                    val performerPrizeArray = artistObject.getJSONArray("performerPrizes")
-                    val performerPrizeList = mutableListOf<PerformerPrize>()
-
-                    for (k in 0 until performerPrizeArray.length()) {
-                        val performerPrizeObject = performerPrizeArray.getJSONObject(k)
-
-                        val performerPrize = PerformerPrize(
-                            performerPrizeObject.getInt("id"),
-                            performerPrizeObject.getString("premiationDate"),
-                        )
-                        performerPrizeList.add(performerPrize)
-                    }
-
-                    artistList.add(i, Artist(
-                        id = artistObject.getInt("id"),
-                        name = artistObject.getString("name"),
-                        image = artistObject.getString("image"),
-                        description = artistObject.getString("description"),
-                        birthDate = artistObject.getString("birthDate"),
-                        albums = albumList,
-                        performerPrizes = performerPrizeList)
-                    )
+                    cont.resume(artistList)
+                } catch (e: Exception) {
+                    cont.resumeWithException(e)
                 }
-                onComplete(artistList)
             },
-            {
-                onError(it)
+            { error ->
+                cont.resumeWithException(error)
             }))
     }
 
