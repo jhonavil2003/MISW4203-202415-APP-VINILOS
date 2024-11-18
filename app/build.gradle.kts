@@ -52,6 +52,8 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:${libs.versions.navigationVersion.get()}")
     implementation("androidx.navigation:navigation-ui-ktx:${libs.versions.navigationVersion.get()}")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:${libs.versions.navigationVersion.get()}")
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.fragment.ktx)
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:${libs.versions.navigationVersion.get()}")

@@ -2,6 +2,7 @@ package com.example.app_vinilos_g17.repositories
 
 import android.app.Application
 import android.util.Log
+import com.example.app_vinilos_g17.models.Album
 import com.example.app_vinilos_g17.models.Artist
 import com.example.app_vinilos_g17.network.NetworkServiceAdapter
 import com.example.app_vinilos_g17.network.CacheManager
@@ -24,6 +25,21 @@ class ArtistRepository(val application: Application) {
             val artistList = networkService.getArtists()
             cacheManager.addArtists(artistList)
             return artistList
+        }
+    }
+
+    suspend fun getArtistDetail(artistId: Int): Artist {
+        val cachedArtist = cacheManager.getArtistDetail(artistId)
+
+        if (cachedArtist != null) {
+            Log.d("Cache decision", "Se retorna información desde caché")
+            return cachedArtist
+        } else {
+            Log.d("Cache decision", "Se retorna información desde api")
+            val artist = networkService.getArtistDetail(artistId)
+            cacheManager.addArtistDetail(artistId, artist)
+
+            return artist
         }
     }
 }

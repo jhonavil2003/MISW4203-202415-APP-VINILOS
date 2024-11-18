@@ -4,10 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_vinilos_g17.R
 import com.example.app_vinilos_g17.databinding.ArtistItemBinding
 import com.example.app_vinilos_g17.models.Artist
+import com.example.app_vinilos_g17.ui.view.ArtistListFragmentDirections
+
 
 class ArtistAdapter : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>(){
     var artists: List<Artist> = emptyList()
@@ -30,9 +33,8 @@ class ArtistAdapter : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>(){
             it.artist = artists[position]
         }
         holder.viewDataBinding.root.setOnClickListener {
-//            val action = ArtistFragmentDirections.actionArtistFragmentToCommentFragment(artists[position].artistId)
-//            // Navigate using that action
-//            holder.viewDataBinding.root.findNavController().navigate(action)
+            val action = ArtistListFragmentDirections.actionNavigationArtistToNavigationArtistDetail(artists[position].id)
+            holder.viewDataBinding.root.findNavController().navigate(action)
         }
     }
 
