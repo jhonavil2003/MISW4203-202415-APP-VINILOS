@@ -23,5 +23,6 @@
     <string name="no_hay_comentarios">No hay comentarios</string>
     <string name="space">.</string>
     <string name="rating">Rating:</string>
+    <string name="fecha_de_nacimiento">Fecha de nacimiento: </string>
 
 </resources>

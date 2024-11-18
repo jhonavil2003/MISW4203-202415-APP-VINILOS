@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import com.example.app_vinilos_g17.R
 import com.example.app_vinilos_g17.databinding.FragmentArtistDetailBinding
 import com.example.app_vinilos_g17.viewmodels.ArtistDetailViewModel
 
@@ -24,14 +23,14 @@ class ArtistDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_artist_detail, container, false)
+        _binding = FragmentArtistDetailBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val artistId = args.id
-        viewModel = ViewModelProvider(this, ArtistDetailViewModel.Factory(requireActivity().application, artistId)).get(
-            ArtistDetailViewModel::class.java)
+        viewModel = ViewModelProvider(this, ArtistDetailViewModel.Factory(requireActivity().application, artistId))[ArtistDetailViewModel::class.java]
 
         viewModel.artist.observe(viewLifecycleOwner) { artist ->
             binding.artist = artist
