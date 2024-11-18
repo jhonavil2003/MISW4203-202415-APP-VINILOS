@@ -23,7 +23,5 @@ class AlbumDetailFragmentTest {
         onView(withId(R.id.albumsRv)).perform(click())
         onView(withId(R.id.textViewName))
             .check(matches(withText("Poeta del pueblo")))
-
-
     }
 }

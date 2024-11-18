@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="album" type="com.example.app_vinilos_g17.models.Album"/>
+        <variable name="album" type="com.example.app_vinilos_g17.models.AlbumList"/>
     </data>
 
 
@@ -32,13 +32,14 @@
                 android:orientation="vertical">
 
 
-                <ImageView
+                <!-- <ImageView
                     android:id="@+id/imageViewCover"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_weight="1"
+                    android:contentDescription="@string/descripcion_imagen"
                     android:scaleType="centerCrop"
-                    app:loadImage="@{album.cover}" />
+                    app:loadImage="@{album.cover}" />-->
 
                 <TextView
                     android:id="@+id/textView6"
@@ -51,7 +52,7 @@
                     android:id="@+id/textView5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text='@{album.performers[0].name + " - " + album.releaseDate.substring(0, 4)}' />
+                    android:text='@{album.performers[0] + " - " + album.releaseDate.substring(0, 4)}' />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

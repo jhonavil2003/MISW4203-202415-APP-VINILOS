@@ -52,6 +52,8 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:${libs.versions.navigationVersion.get()}")
     implementation("androidx.navigation:navigation-ui-ktx:${libs.versions.navigationVersion.get()}")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:${libs.versions.navigationVersion.get()}")
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.fragment.ktx)
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:${libs.versions.navigationVersion.get()}")
@@ -68,7 +70,9 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
 
     implementation("com.github.bumptech.glide:glide:4.13.2")
-    kapt("com.github.bumptech.glide:compiler:4.13.2") // Para el procesamiento de anotaciones
+    annotationProcessor("com.github.bumptech.glide:compiler:4.13.2")
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
