@@ -59,6 +59,8 @@ class CacheManager(context: Context) {
         return emptyList()
     }
 
+    private var artistCache: LruCache<Int, Artist> = LruCache(10)
+
     // Se crea solo un registro de caché de listado de artistas
     private var artistListCache: LruCache<Int, List<Artist>> = LruCache(1)
     fun getArtists():  List<Artist>? {
@@ -66,5 +68,13 @@ class CacheManager(context: Context) {
     }
     fun addArtists(artistList: List<Artist>) {
         artistListCache.put(DEFAULT_ARTIST_LIST_ID, artistList)
+    }
+
+    fun addArtistDetail(artistId: Int, artist: Artist) {
+        artistCache.put(artistId, artist)
+    }
+
+    fun getArtistDetail(artistId: Int): Artist? {
+        return artistCache.get(artistId)
     }
 }
