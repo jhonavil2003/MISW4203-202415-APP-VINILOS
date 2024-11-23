@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="artist" type="com.example.app_vinilos_g17.models.Artist"/>
+
+        <variable
+            name="artist"
+            type="com.example.app_vinilos_g17.models.Artist" />
     </data>
 
     <ScrollView
@@ -18,36 +22,42 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="380dp"
+                android:layout_height="176dp"
+                app:loadImage="@{artist.image}" />
+
+            <TextView
+                android:id="@+id/textViewDescription"
+                android:layout_width="382dp"
+                android:layout_height="86dp"
+                android:layout_marginTop="16dp"
+                android:text="@{artist.description}"
+                android:textSize="16sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textViewName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{artist.name}"
-                    android:textSize="24sp"
+                    android:id="@+id/textViewBirthDateLabel"
+                    android:layout_width="196dp"
+                    android:layout_height="76dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/fecha_de_nacimiento"
+                    android:textSize="16sp"
                     android:textStyle="bold"/>
 
-                <ImageView
-                    android:id="@+id/imageViewCover"
-                    android:layout_width="0dp"
-                    android:layout_height="200dp"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/descripcion_imagen"
-                    android:scaleType="centerCrop"
-                    app:loadImage="@{artist.image}" />
+                <TextView
+                    android:id="@+id/textViewBirthDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="76dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{artist.birthDate}"
+                    android:textSize="16sp" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/textViewDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{artist.description}"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"/>
 
 
         </LinearLayout>
