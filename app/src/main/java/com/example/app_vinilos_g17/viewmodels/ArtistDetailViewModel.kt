@@ -10,9 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.app_vinilos_g17.models.Artist
 import com.example.app_vinilos_g17.repositories.ArtistRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ArtistDetailViewModel (application: Application, artistId: Int) : AndroidViewModel(application) {
     private val artistRepository = ArtistRepository(application)
@@ -26,22 +27,37 @@ class ArtistDetailViewModel (application: Application, artistId: Int) : AndroidV
     private val _isNetworkErrorShown = MutableLiveData(false)
 
     init {
-        refreshDataFromNetwork(artistId)
+        fetchArtistDetail(artistId)
     }
 
-    private fun refreshDataFromNetwork(artistId: Int) {
-        try {
-            viewModelScope.launch (Dispatchers.Default){
-                withContext(Dispatchers.IO){
-                    val data = artistRepository.getArtistDetail(artistId)
-                    _artist.postValue(data)
-                }
-                _eventNetworkError.postValue(false)
-                _isNetworkErrorShown.postValue(false)
+    private fun fetchArtistDetail(artistId: Int) {
+        // Usamos viewModelScope para ejecutar la tarea en una corutina
+        viewModelScope.launch {
+            try {
+                // Llamamos a la función suspensiva en el repositorio para obtener el detalle del álbum
+                val fetchedArtist = artistRepository.getArtistDetail(artistId)
+                // Formateamos la fecha
+                val formattedAlbum = fetchedArtist.copy(birthDate = formatReleaseDate(fetchedArtist.birthDate))
+                // Actualizamos el LiveData con los datos
+                _artist.postValue(formattedAlbum)
+                // Indicamos que no hubo error
+                _eventNetworkError.value = false
+            } catch (error: Exception) {
+                // En caso de error, mostramos un mensaje y actualizamos el estado de error
+                Log.d("NetworkError", error.toString())
+                _eventNetworkError.value = true
             }
         }
-        catch (e: java.lang.Exception){
-            _eventNetworkError.value = true
+    }
+
+    private fun formatReleaseDate(dateString: String): String {
+        val originalFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        val desiredFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return try {
+            val date: Date = originalFormat.parse(dateString)!!
+            desiredFormat.format(date)
+        } catch (e: Exception) {
+            dateString // Devuelve la fecha original si hay un error
         }
     }
 
