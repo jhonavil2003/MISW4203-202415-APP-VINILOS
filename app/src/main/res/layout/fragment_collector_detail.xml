@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="72dp"
+    android:paddingTop="72dp">
+
+    <TextView
+        android:id="@+id/collectorName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textSize="20sp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/collectorTelephone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Telephone"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/collectorEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:layout_marginBottom="8dp" />
+</LinearLayout>

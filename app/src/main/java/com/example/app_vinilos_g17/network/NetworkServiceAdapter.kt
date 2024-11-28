@@ -352,16 +352,21 @@ class NetworkServiceAdapter(context: Context) {
                         val performersArray = item.getJSONArray("favoritePerformers")
                         for (i in 0 until performersArray.length()) {
                             val performerObj = performersArray.getJSONObject(i)
+
+                            // Asignar creación de fecha y nacimiento de manera segura
+                            val creationDate = performerObj.optString("creationDate", "No Date Available")
+                            val birthDate = performerObj.optString("birthDate", "No Date Available")
+
                             val performer = Performer(
                                 id = performerObj.getInt("id"),
                                 name = performerObj.getString("name"),
                                 image = performerObj.getString("image"),
                                 description = performerObj.getString("description"),
-                                birthDate = performerObj.getString("creationDate")
+                                birthDate = birthDate,
+                                creationDate = creationDate
                             )
                             favoritePerformers.add(performer)
                         }
-
 
                         val collectorAlbums = mutableListOf<CollectorAlbum>()
                         val albumsArray = item.getJSONArray("collectorAlbums")
@@ -396,6 +401,7 @@ class NetworkServiceAdapter(context: Context) {
             )
         )
     }
+
 
 
     private fun getRequest(

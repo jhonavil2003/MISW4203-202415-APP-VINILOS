@@ -49,5 +49,21 @@
         android:id="@+id/navigation_collectors"
         android:name="com.example.app_vinilos_g17.ui.view.CollectorListFragment"
         android:label="@string/title_collectors"
-        tools:layout="@layout/fragment_collector_list" />
+        tools:layout="@layout/fragment_collector_list">
+        <action
+            android:id="@+id/action_navigation_collectors_to_navigation_collectorDetail"
+            app:destination="@id/navigation_collectorDetail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_collectorDetail"
+        android:name="com.example.app_vinilos_g17.ui.view.CollectorDetailFragment"
+        android:label="@string/title_collectors"
+        tools:layout="@layout/fragment_collector_detail">
+        <!-- Argumento para pasar el collectorId del coleccionista -->
+        <argument
+            android:name="collectorId"
+            app:argType="integer" />
+    </fragment>
+
 </navigation>

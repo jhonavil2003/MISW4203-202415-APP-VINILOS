@@ -77,4 +77,15 @@ class CacheManager(context: Context) {
     fun getArtistDetail(artistId: Int): Artist? {
         return artistCache.get(artistId)
     }
+
+    private var collectorDetailCache: LruCache<Int, Collector> = LruCache(10)
+
+    fun addCollectorDetail(collectorId: Int, collectorDetail: Collector) {
+        collectorDetailCache.put(collectorId, collectorDetail)
+    }
+
+    fun getCollectorDetail(collectorId: Int): Collector? {
+        return collectorDetailCache.get(collectorId)
+    }
+
 }
