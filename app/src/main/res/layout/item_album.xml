@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="?android:attr/selectableItemBackground"> <!-- Efecto al tocar -->
+
+    <!-- ID del álbum -->
+    <TextView
+        android:id="@+id/textViewAlbumId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="Album ID: 100" />
+
+    <!-- Precio -->
+    <TextView
+        android:id="@+id/textViewAlbumPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:text="Price: $35"
+        android:layout_marginTop="4dp" />
+
+    <!-- Estado -->
+    <TextView
+        android:id="@+id/textViewAlbumStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:text="Status: Active"
+        android:layout_marginTop="4dp" />
+
+</LinearLayout>
