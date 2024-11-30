@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.app_vinilos_g17.databinding.FragmentCollectorDetailBinding
 import com.example.app_vinilos_g17.ui.adapters.CommentAdapter
+import com.example.app_vinilos_g17.ui.adapters.CollectorAlbumsAdapter
 import com.example.app_vinilos_g17.ui.adapters.PerformerAdapter
 import com.example.app_vinilos_g17.viewmodels.CollectorDetailViewModel
 
@@ -24,6 +25,7 @@ class CollectorDetailFragment : Fragment() {
     private lateinit var viewModel: CollectorDetailViewModel
     private lateinit var performerAdapter: PerformerAdapter
     private lateinit var commentAdapter: CommentAdapter
+    private lateinit var albumsAdapter: CollectorAlbumsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,14 +43,20 @@ class CollectorDetailFragment : Fragment() {
             CollectorDetailViewModel.Factory(requireActivity().application, collectorId)
         ).get(CollectorDetailViewModel::class.java)
 
+        // Configurar RecyclerView para artistas
         binding.recyclerViewPerformers.layoutManager = LinearLayoutManager(context)
         performerAdapter = PerformerAdapter()
         binding.recyclerViewPerformers.adapter = performerAdapter
 
-
+        // Configurar RecyclerView para comentarios
         binding.recyclerViewComments.layoutManager = LinearLayoutManager(context)
         commentAdapter = CommentAdapter(emptyList())
         binding.recyclerViewComments.adapter = commentAdapter
+
+        // Configurar RecyclerView para álbumes
+        binding.recyclerViewAlbums.layoutManager = LinearLayoutManager(context)
+        albumsAdapter = CollectorAlbumsAdapter(emptyList())
+        binding.recyclerViewAlbums.adapter = albumsAdapter
 
         viewModel.collector.observe(viewLifecycleOwner) { collector ->
             binding.collector = collector
@@ -56,14 +64,14 @@ class CollectorDetailFragment : Fragment() {
 
             performerAdapter.updatePerformers(collector.favoritePerformers)
 
-//            if (collector.albums.isEmpty()) {
-//                binding.textViewNoAlbums.visibility = View.VISIBLE
-//                binding.recyclerViewAlbums.visibility = View.GONE
-//            } else {
-//                binding.textViewNoAlbums.visibility = View.GONE
-//                binding.recyclerViewAlbums.visibility = View.VISIBLE
-//                albumAdapter.updateAlbums(collector.albums)
-//            }
+            if (collector.collectorAlbums.isEmpty()) {
+                binding.textViewNoAlbums.visibility = View.VISIBLE
+                binding.recyclerViewAlbums.visibility = View.GONE
+            } else {
+                binding.textViewNoAlbums.visibility = View.GONE
+                binding.recyclerViewAlbums.visibility = View.VISIBLE
+                albumsAdapter.updateCollectorAlbums(collector.collectorAlbums)
+            }
 
             if (collector.comments.isEmpty()) {
                 binding.textViewNoComments.visibility = View.VISIBLE
@@ -79,7 +87,6 @@ class CollectorDetailFragment : Fragment() {
             if (isNetworkError) onNetworkError()
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

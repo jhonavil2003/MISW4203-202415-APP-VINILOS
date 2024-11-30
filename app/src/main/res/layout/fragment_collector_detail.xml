@@ -68,6 +68,14 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false" />
 
+            <TextView
+                android:id="@+id/textViewNoAlbums"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No hay album coleccionados"
+                android:visibility="gone" />
+
+
             <!-- Comentarios -->
             <TextView
                 android:id="@+id/textViewCommentsTitle"

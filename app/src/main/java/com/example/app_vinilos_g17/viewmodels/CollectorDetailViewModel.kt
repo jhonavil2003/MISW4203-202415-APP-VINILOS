@@ -4,8 +4,6 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.app_vinilos_g17.models.Collector
-import com.example.app_vinilos_g17.models.Comment
-import com.example.app_vinilos_g17.models.Performer
 import com.example.app_vinilos_g17.repositories.CollectorsRepository
 import kotlinx.coroutines.launch
 
@@ -15,12 +13,6 @@ class CollectorDetailViewModel(application: Application, collectorId: Int) : And
 
     private val _collector = MutableLiveData<Collector>()
     val collector: LiveData<Collector> get() = _collector
-
-//    private val _comments = MutableLiveData<List<Comment>>()
-//    val comments: LiveData<List<Comment>> get() = _comments
-//
-//    private val _favoritePerformers = MutableLiveData<List<Performer>>()
-//    val favoritePerformers: LiveData<List<Performer>> get() = _favoritePerformers
 
     private val _eventNetworkError = MutableLiveData(false)
     val eventNetworkError: LiveData<Boolean> get() = _eventNetworkError
@@ -37,12 +29,9 @@ class CollectorDetailViewModel(application: Application, collectorId: Int) : And
             try {
                 // Llamada al repositorio para obtener el detalle del coleccionista
                 val collectorDetail = collectorsRepository.getCollectorDetail(collectorId)
-                Log.d("CollectorDetailViewModel", "Coleccionista obtenido: ${collectorDetail.name}")
 
                 // Actualizamos los LiveData con los datos del coleccionista
                 _collector.postValue(collectorDetail)
-               // _comments.postValue(collectorDetail.comments)
-               // _favoritePerformers.postValue(collectorDetail.favoritePerformers)
 
                 _eventNetworkError.value = false
             } catch (e: Exception) {
