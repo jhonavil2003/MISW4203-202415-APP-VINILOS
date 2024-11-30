@@ -7,5 +7,5 @@ data class Collector(
     val email: String,
     val comments: List<Comment> = emptyList(),
     val favoritePerformers: List<Performer> = emptyList(),
-    val collectorAlbums: List<CollectorAlbum> = emptyList()
+    var collectorAlbums: List<CollectorAlbum> = emptyList()
 )

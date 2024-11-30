@@ -4,12 +4,15 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.app_vinilos_g17.models.Collector
+import com.example.app_vinilos_g17.models.CollectorAlbum
 import com.example.app_vinilos_g17.repositories.CollectorsRepository
+import com.example.app_vinilos_g17.repositories.AlbumDetailRepository
 import kotlinx.coroutines.launch
 
 class CollectorDetailViewModel(application: Application, collectorId: Int) : AndroidViewModel(application) {
 
     private val collectorsRepository = CollectorsRepository(application)
+    private val albumDetailRepository = AlbumDetailRepository(application)
 
     private val _collector = MutableLiveData<Collector>()
     val collector: LiveData<Collector> get() = _collector
@@ -24,13 +27,10 @@ class CollectorDetailViewModel(application: Application, collectorId: Int) : And
     }
 
     private fun fetchCollectorDetail(collectorId: Int) {
-        // Ejecutar la llamada en una corutina
         viewModelScope.launch {
             try {
-                // Llamada al repositorio para obtener el detalle del coleccionista
                 val collectorDetail = collectorsRepository.getCollectorDetail(collectorId)
-
-                // Actualizamos los LiveData con los datos del coleccionista
+                collectorDetail.collectorAlbums = fetchAlbumNames(collectorDetail.collectorAlbums)
                 _collector.postValue(collectorDetail)
 
                 _eventNetworkError.value = false
@@ -41,6 +41,17 @@ class CollectorDetailViewModel(application: Application, collectorId: Int) : And
         }
     }
 
+    private suspend fun fetchAlbumNames(collectorAlbums: List<CollectorAlbum>): List<CollectorAlbum> {
+        collectorAlbums.forEach { album ->
+            try {
+                val albumDetail = albumDetailRepository.getAlbumDetail(album.id)
+                album.albumName = albumDetail.name
+            } catch (e: Exception) {
+                Log.e("NetworkError", "Error al obtener el nombre del álbum: ${e.message}")
+            }
+        }
+        return collectorAlbums
+    }
 
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true

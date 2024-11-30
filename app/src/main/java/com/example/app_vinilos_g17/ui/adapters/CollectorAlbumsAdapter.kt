@@ -31,8 +31,8 @@ class CollectorAlbumsAdapter(private var collectorAlbums: List<CollectorAlbum>) 
     inner class CollectorAlbumViewHolder(private val binding: ItemAlbumBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(collectorAlbum: CollectorAlbum) {
-            binding.textViewAlbumId.text = collectorAlbum.id.toString()
-            binding.textViewAlbumPrice.text = "$${collectorAlbum.price}" // Formato de precio
+            binding.textViewAlbumName.text = collectorAlbum.albumName ?: "Sin nombre"
+            binding.textViewAlbumPrice.text = "$${collectorAlbum.price}"
             binding.textViewAlbumStatus.text = collectorAlbum.status
         }
     }
