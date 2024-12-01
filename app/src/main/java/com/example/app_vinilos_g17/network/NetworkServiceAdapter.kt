@@ -331,16 +331,32 @@ class NetworkServiceAdapter(context: Context) {
         ))
     }
 
-    fun createAlbum(album: Map<String, String>) {
+    suspend fun createAlbum(album: Map<String, String>): AlbumList = suspendCoroutine { cont ->
         val requestBody = JSONObject(album)
-        Log.d(TAG, "Intentando crear álbum: ${requestBody.toString()}")
-        requestQueue.add(postRequest("albums",
-            requestBody,
-            { response ->
-                Log.d(TAG, "Respuesta creando álbum: ${response}")
+        Log.d(TAG, "Intentando crear álbum: $requestBody")
+
+        requestQueue.add(postRequest(
+            path = "albums",
+            requestBody = requestBody,
+            onSuccess = { response ->
+                try {
+                    val createdAlbum = AlbumList(
+                        id = response.getInt("id"),
+                        name = response.getString("name"),
+                        cover = response.getString("cover"),
+                        releaseDate = response.getString("releaseDate"),
+                        performers = emptyList()
+                    )
+
+                    // Retornar el objeto AlbumList
+                    cont.resume(createdAlbum)
+                } catch (e: Exception) {
+                    cont.resumeWithException(e)
+                }
             },
-            { error ->
-                Log.e(TAG, "Error creando album: ${error.networkResponse?.statusCode} - ${error.message}")
+            onError = { error ->
+                // Manejar errores de red o parsing
+                cont.resumeWithException(error)
             }
         ))
     }
@@ -356,12 +372,26 @@ class NetworkServiceAdapter(context: Context) {
     private fun postRequest(
         path: String,
         requestBody: JSONObject,
-        responseListener: Response.Listener<JSONObject>,
-        errorListener: Response.ErrorListener
+        onSuccess: (JSONObject) -> Unit,
+        onError: (Exception) -> Unit
     ): JsonObjectRequest {
-        return object : JsonObjectRequest(Method.POST, BASE_URL + path, requestBody, responseListener, errorListener) {
+        return object : JsonObjectRequest(
+            Method.POST,
+            BASE_URL + path,
+            requestBody,
+            { response ->
+                try {
+                    onSuccess(response)
+                } catch (e: Exception) {
+                    onError(e)
+                }
+            },
+            { error ->
+                onError(Exception("Error en la solicitud: ${error.networkResponse?.statusCode} - ${error.message}"))
+            }
+        ) {
             override fun getPriority(): Priority {
-                return Priority.HIGH // Asignar alta prioridad a las solicitudes de POST
+                return Priority.HIGH
             }
         }
     }
