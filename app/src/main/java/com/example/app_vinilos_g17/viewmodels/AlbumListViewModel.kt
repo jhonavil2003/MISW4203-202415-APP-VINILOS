@@ -64,6 +64,19 @@ class AlbumListViewModel(application: Application)  : AndroidViewModel(applicati
         _isNetworkErrorShown.value = true
     }
 
+    fun createAlbum(album: Map<String, String>) {
+        viewModelScope.launch {
+            try {
+                val albumCreated =  albumListRepository.createAlbum(album)
+                val updatedList = _albums.value.orEmpty().toMutableList()
+                updatedList.add(albumCreated)
+                _albums.value = updatedList
+            } catch (e: Exception) {
+                Log.e(TAG, "Error adding album", e)
+            }
+        }
+    }
+
     class Factory(val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AlbumListViewModel::class.java)) {
