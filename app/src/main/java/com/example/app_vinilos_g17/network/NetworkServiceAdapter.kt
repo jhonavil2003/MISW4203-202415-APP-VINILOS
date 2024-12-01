@@ -1,9 +1,11 @@
 package com.example.app_vinilos_g17.network
 
 import android.content.Context
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.app_vinilos_g17.models.Album
@@ -328,11 +330,33 @@ class NetworkServiceAdapter(context: Context) {
         ))
     }
 
+    fun createAlbum(album: Map<String, String>) {
+        val requestBody = JSONObject(album)
+        requestQueue.add(postRequest("albums",
+            requestBody,
+            { response ->
+                Log.d("network", "Holaaa")
+            },
+            { error ->
+                Log.d("network", "Holaaa error", error)
+            }
+        ))
+    }
+
     private fun getRequest(
         path: String,
         responseListener: Response.Listener<String>,
         errorListener: Response.ErrorListener
     ): StringRequest {
         return StringRequest(Request.Method.GET, BASE_URL + path, responseListener, errorListener)
+    }
+
+    private fun postRequest(
+        path: String,
+        requestBody: JSONObject,
+        responseListener: Response.Listener<JSONObject>,
+        errorListener: Response.ErrorListener
+    ): JsonObjectRequest {
+        return JsonObjectRequest(Request.Method.POST, BASE_URL + path, requestBody, responseListener, errorListener)
     }
 }

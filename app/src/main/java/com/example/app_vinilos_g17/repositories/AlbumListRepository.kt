@@ -27,4 +27,14 @@ class AlbumListRepository(val application: Application) {
             return albumList
         }
     }
+
+    suspend fun createAlbum(album: Map<String, String>) {
+        try {
+            networkService.createAlbum(album)
+            Log.d(TAG, "Album creado con éxito")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error creando album", e)
+            throw e
+        }
+    }    
 }
