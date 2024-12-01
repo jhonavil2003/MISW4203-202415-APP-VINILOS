@@ -34,11 +34,6 @@ class AlbumListViewModel(application: Application)  : AndroidViewModel(applicati
     val eventNetworkError: LiveData<Boolean>
         get() = _eventNetworkError
 
-    private var _isNetworkErrorShown = MutableLiveData(false)
-
-    val isNetworkErrorShown: LiveData<Boolean>
-        get() = _isNetworkErrorShown
-
     init {
         refreshDataFromNetwork()
     }
@@ -60,8 +55,19 @@ class AlbumListViewModel(application: Application)  : AndroidViewModel(applicati
         }
     }
 
-    fun onNetworkErrorShown() {
-        _isNetworkErrorShown.value = true
+    fun createAlbum(album: Map<String, String>) {
+        viewModelScope.launch {
+            try {
+                val albumCreated =  albumListRepository.createAlbum(album)
+                val updatedList = _albums.value.orEmpty().toMutableList()
+                updatedList.add(albumCreated)
+                _albums.value = updatedList
+                _eventNetworkError.value = false
+            } catch (e: Exception) {
+                Log.e(TAG, "Error adding album", e)
+                _eventNetworkError.value = true
+            }
+        }
     }
 
     class Factory(val app: Application) : ViewModelProvider.Factory {
