@@ -25,4 +25,8 @@
     <string name="rating">Rating:</string>
     <string name="fecha_de_nacimiento">Fecha de nacimiento: </string>
 
+    <string name="name_hint">Nombre: </string>
+    <string name="duration_hint">Duracion: </string>
+    <string name="post_label">Crear</string>
+    <string name="agregar_track">Add</string>
 </resources>

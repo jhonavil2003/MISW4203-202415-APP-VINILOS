@@ -5,6 +5,7 @@ import com.example.app_vinilos_g17.models.Album
 import com.example.app_vinilos_g17.network.NetworkServiceAdapter
 import com.example.app_vinilos_g17.network.CacheManager
 import android.util.Log
+import org.json.JSONObject
 
 class AlbumDetailRepository(val application: Application) {
     private val networkService = NetworkServiceAdapter.getInstance(application)
@@ -24,5 +25,10 @@ class AlbumDetailRepository(val application: Application) {
 
             return album
         }
+    }
+
+    suspend fun setTrackAlbum(albumId: Int, bodyRequest: JSONObject): String {
+        val response = networkService.setTrackalbum(albumId, bodyRequest);
+        return response;
     }
 }

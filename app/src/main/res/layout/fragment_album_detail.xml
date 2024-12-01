@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="album" type="com.example.app_vinilos_g17.models.Album"/>
+
+        <variable
+            name="album"
+            type="com.example.app_vinilos_g17.models.Album" />
     </data>
 
     <ScrollView
@@ -35,9 +38,9 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:layout_weight="2"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/textViewName"
@@ -45,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:text="@{album.name}"
                         android:textSize="24sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -55,17 +58,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
                             android:text="@string/fecha_de_publicaci_n"
-                            android:textStyle="bold"
                             android:textSize="14sp"
-                            android:layout_marginEnd="4dp"/>
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/textViewReleaseDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{album.releaseDate}"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -76,17 +79,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
                             android:text="@string/g_nero"
-                            android:textStyle="bold"
                             android:textSize="14sp"
-                            android:layout_marginEnd="4dp"/>
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/textViewGenre"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{album.genre}"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -97,17 +100,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
                             android:text="@string/sello"
-                            android:textStyle="bold"
                             android:textSize="14sp"
-                            android:layout_marginEnd="4dp"/>
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/textViewRecordLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{album.recordLabel}"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -116,43 +119,65 @@
                 android:id="@+id/textViewDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:text="@{album.description}"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textViewPerformersTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/int_rpretes"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="16dp"/>
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewPerformers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="16dp"
+                android:nestedScrollingEnabled="false" />
 
 
             <!-- Sección de Tracks -->
-            <TextView
-                android:id="@+id/textViewTracksTitle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/pistas"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="16dp"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textViewTracksTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/pistas"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
+                <ImageButton
+                    android:id="@+id/add_track"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:contentDescription="@string/agregar_track"
+                    android:src="@drawable/add_circle_24px"
+                    app:tint="#3D0F5E" />
+
+                <!--<Button
+                    android:id="@+id/add_track"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:drawableBottom="@drawable/add_circle_24px"
+                    android:drawablePadding="4dp"/>-->
+
+            </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewTracks"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/textViewNoTracks"
@@ -161,22 +186,64 @@
                 android:text="@string/no_hay_tracks_disponibles"
                 android:visibility="gone" /> <!-- Ocultado por defecto -->
 
+            <LinearLayout
+                android:id="@+id/addtrack_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txt_post_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/name_hint" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txt_post_duration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/duration_hint" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/post_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/post_label" />
+
+            </LinearLayout>
+
+
             <!-- Sección de Comments -->
             <TextView
                 android:id="@+id/textViewCommentsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/comentarios"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="16dp"/>
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewComments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"/>
+                android:nestedScrollingEnabled="false" />
 
             <TextView
                 android:id="@+id/textViewNoComments"
@@ -189,11 +256,11 @@
                 android:id="@+id/scroll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/space"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="16dp"/>
+                android:textStyle="bold" />
 
 
         </LinearLayout>
