@@ -25,6 +25,10 @@
     <string name="rating">Rating:</string>
     <string name="fecha_de_nacimiento">Fecha de nacimiento: </string>
 
+    <string name="error_creating_album">Error al crear el álbum</string>
+    <string name="error_invalid_release_date_album">Fecha de lanzamiento inválida. Formato esperado: yyyy-MM-dd</string>
+
+
     <string-array name="genres">
         <item>Classical</item>
         <item>Salsa</item>
