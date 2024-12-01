@@ -14,9 +14,9 @@ class AlbumListRepository(val application: Application) {
         private const val TAG = "AlbumListRepository"
     }
 
-    suspend fun getAlbumList(): List<AlbumList> {
+    suspend fun getAlbumList(forceNetworkRefresh: Boolean = false): List<AlbumList> {
         val cachedAlbumList = cacheManager.getAlbumList()
-        if (cachedAlbumList != null) {
+        if (cachedAlbumList != null && !forceNetworkRefresh) {
             Log.d(TAG, "Se retorna información desde caché")
             return cachedAlbumList
         } else {

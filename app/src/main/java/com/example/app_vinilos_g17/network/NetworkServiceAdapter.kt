@@ -26,6 +26,7 @@ import kotlin.coroutines.suspendCoroutine
 class NetworkServiceAdapter(context: Context) {
 
     companion object {
+        private const val TAG = "NetworkServiceAdapter"
         const val BASE_URL = "https://blackvynils-827885dbcaa3.herokuapp.com/"
         private var instance: NetworkServiceAdapter? = null
 
@@ -332,13 +333,14 @@ class NetworkServiceAdapter(context: Context) {
 
     fun createAlbum(album: Map<String, String>) {
         val requestBody = JSONObject(album)
+        Log.d(TAG, "Intentando crear álbum: ${requestBody.toString()}")
         requestQueue.add(postRequest("albums",
             requestBody,
             { response ->
-                Log.d("network", "Holaaa")
+                Log.d(TAG, "Respuesta creando álbum: ${response}")
             },
             { error ->
-                Log.d("network", "Holaaa error", error)
+                Log.e(TAG, "Error creando album: ${error.networkResponse?.statusCode} - ${error.message}")
             }
         ))
     }
@@ -357,6 +359,10 @@ class NetworkServiceAdapter(context: Context) {
         responseListener: Response.Listener<JSONObject>,
         errorListener: Response.ErrorListener
     ): JsonObjectRequest {
-        return JsonObjectRequest(Request.Method.POST, BASE_URL + path, requestBody, responseListener, errorListener)
+        return object : JsonObjectRequest(Method.POST, BASE_URL + path, requestBody, responseListener, errorListener) {
+            override fun getPriority(): Priority {
+                return Priority.HIGH // Asignar alta prioridad a las solicitudes de POST
+            }
+        }
     }
 }

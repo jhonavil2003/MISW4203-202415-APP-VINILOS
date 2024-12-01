@@ -68,6 +68,8 @@ class AlbumListViewModel(application: Application)  : AndroidViewModel(applicati
         viewModelScope.launch {
             try {
                 albumListRepository.createAlbum(album)
+                val updatedAlbums = albumListRepository.getAlbumList(forceNetworkRefresh = true)
+                _albums.postValue(updatedAlbums)
             } catch (e: Exception) {
                 Log.e(TAG, "Error adding album", e)
             }
