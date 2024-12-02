@@ -6,64 +6,59 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app_vinilos_g17.R
 import com.example.app_vinilos_g17.databinding.FragmentCollectorListBinding
-import com.example.app_vinilos_g17.models.Collector
-import com.example.app_vinilos_g17.viewmodels.CollectorsViewModel
 import com.example.app_vinilos_g17.ui.adapters.CollectorsAdapter
+import com.example.app_vinilos_g17.viewmodels.CollectorsViewModel
 
-@Suppress("DEPRECATION")
 class CollectorListFragment : Fragment() {
     private var _binding: FragmentCollectorListBinding? = null
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewModel: CollectorsViewModel
-    private var viewModelAdapter: CollectorsAdapter? = null
+    private lateinit var viewModelAdapter: CollectorsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCollectorListBinding.inflate(inflater, container, false)
-        val view = binding.root
-        viewModelAdapter = CollectorsAdapter()
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         recyclerView = binding.collectorRv
         recyclerView.layoutManager = LinearLayoutManager(context)
+        viewModelAdapter = CollectorsAdapter()
         recyclerView.adapter = viewModelAdapter
-    }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val activity = requireNotNull(this.activity) {
-            "You can only access the viewModel after onActivityCreated()"
+        viewModel = ViewModelProvider(this, CollectorsViewModel.Factory(activity!!.application)).get(CollectorsViewModel::class.java)
+
+        // Observa la lista de coleccionistas y actualiza el adaptador
+        viewModel.collectors.observe(viewLifecycleOwner) { collectors ->
+            viewModelAdapter.collectors = collectors
         }
-        activity.actionBar?.title = getString(R.string.title_collectors)
-        viewModel = ViewModelProvider(this, CollectorsViewModel.Factory(activity.application)).get(CollectorsViewModel::class.java)
-        viewModel.collectors.observe(viewLifecycleOwner) {
-            it.apply {
-                viewModelAdapter!!.collectors = this
-            }
-        }
+
+        // Observa el estado de error de red
         viewModel.eventNetworkError.observe(viewLifecycleOwner) { isNetworkError ->
             if (isNetworkError) onNetworkError()
         }
+
+        activity?.actionBar?.title = getString(R.string.title_collectors)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     private fun onNetworkError() {
-        if(!viewModel.isNetworkErrorShown.value!!) {
+        if (viewModel.isNetworkErrorShown.value != true) {
             Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
             viewModel.onNetworkErrorShown()
         }

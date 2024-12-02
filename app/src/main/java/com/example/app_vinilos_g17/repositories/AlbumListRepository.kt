@@ -14,9 +14,9 @@ class AlbumListRepository(val application: Application) {
         private const val TAG = "AlbumListRepository"
     }
 
-    suspend fun getAlbumList(): List<AlbumList> {
+    suspend fun getAlbumList(forceNetworkRefresh: Boolean = false): List<AlbumList> {
         val cachedAlbumList = cacheManager.getAlbumList()
-        if (cachedAlbumList != null) {
+        if (cachedAlbumList != null && !forceNetworkRefresh) {
             Log.d(TAG, "Se retorna información desde caché")
             return cachedAlbumList
         } else {
@@ -27,4 +27,15 @@ class AlbumListRepository(val application: Application) {
             return albumList
         }
     }
+
+    suspend fun createAlbum(album: Map<String, String>): AlbumList {
+        try {
+            val albumCreated = networkService.createAlbum(album)
+            Log.d(TAG, "Album creado con éxito")
+            return albumCreated
+        } catch (e: Exception) {
+            Log.e(TAG, "Error creando album", e)
+            throw e
+        }
+    }    
 }
