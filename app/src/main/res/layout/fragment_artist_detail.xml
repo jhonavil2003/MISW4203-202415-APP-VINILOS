@@ -30,8 +30,9 @@
 
             <TextView
                 android:id="@+id/textViewDescription"
-                android:layout_width="382dp"
-                android:layout_height="86dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="4dp"
                 android:layout_marginTop="16dp"
                 android:text="@{artist.description}"
                 android:textSize="16sp" />
@@ -43,8 +44,9 @@
 
                 <TextView
                     android:id="@+id/textViewBirthDateLabel"
-                    android:layout_width="196dp"
-                    android:layout_height="76dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="4dp"
                     android:layout_marginTop="16dp"
                     android:text="@string/fecha_de_nacimiento"
                     android:textSize="16sp"
@@ -53,7 +55,8 @@
                 <TextView
                     android:id="@+id/textViewBirthDate"
                     android:layout_width="match_parent"
-                    android:layout_height="76dp"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="4dp"
                     android:layout_marginTop="16dp"
                     android:text="@{artist.birthDate}"
                     android:textSize="16sp" />
