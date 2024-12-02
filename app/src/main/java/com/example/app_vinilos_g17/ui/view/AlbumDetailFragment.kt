@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.app_vinilos_g17.databinding.FragmentAlbumDetailBinding
@@ -15,6 +16,7 @@ import com.example.app_vinilos_g17.ui.adapters.TrackAdapter
 import com.example.app_vinilos_g17.ui.adapters.CommentAdapter
 import com.example.app_vinilos_g17.ui.adapters.PerformerAdapter
 import com.example.app_vinilos_g17.viewmodels.AlbumDetailViewModel
+import org.json.JSONObject
 
 class AlbumDetailFragment : Fragment() {
     private var _binding: FragmentAlbumDetailBinding? = null
@@ -38,6 +40,28 @@ class AlbumDetailFragment : Fragment() {
         val albumId = args.id
         viewModel = ViewModelProvider(this, AlbumDetailViewModel.Factory(requireActivity().application, albumId)).get(
             AlbumDetailViewModel::class.java)
+
+        binding.addTrack.setOnClickListener {
+            if (binding.addtrackForm.visibility == View.GONE){
+                binding.addtrackForm.visibility = View.VISIBLE
+            } else{
+                binding.addtrackForm.visibility = View.GONE
+            }
+        }
+
+        binding.postButton.setOnClickListener{
+            val name = binding.txtPostName.text
+            val duration = binding.txtPostDuration.text
+            val track = mapOf(
+                "name" to name.toString(),
+                "duration" to duration.toString(),
+            )
+            val jsonParams = JSONObject()
+            jsonParams.put("name",name)
+            jsonParams.put("duration", duration)
+
+            viewModel.setTrack(albumId, track)
+        }
 
 
         binding.recyclerViewPerformers.layoutManager = LinearLayoutManager(context)

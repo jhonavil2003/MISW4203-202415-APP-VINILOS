@@ -1,10 +1,10 @@
 package com.example.app_vinilos_g17.repositories
 
 import android.app.Application
-import com.example.app_vinilos_g17.models.Album
-import com.example.app_vinilos_g17.network.NetworkServiceAdapter
-import com.example.app_vinilos_g17.network.CacheManager
 import android.util.Log
+import com.example.app_vinilos_g17.models.Album
+import com.example.app_vinilos_g17.network.CacheManager
+import com.example.app_vinilos_g17.network.NetworkServiceAdapter
 
 class AlbumDetailRepository(val application: Application) {
     private val networkService = NetworkServiceAdapter.getInstance(application)
@@ -23,6 +23,17 @@ class AlbumDetailRepository(val application: Application) {
             cacheManager.addAlbumDetails(albumId, album)
 
             return album
+        }
+    }
+
+    suspend fun setTrackAlbum(albumId: Int, album: Map<String, String>): String {
+        try {
+            val albumCreated = networkService.setTrack(albumId, album)
+            Log.d("Track", "Album creado con éxito")
+            return albumCreated
+        } catch (e: Exception) {
+            Log.e("Track", "Error creando album", e)
+            throw e
         }
     }
 }

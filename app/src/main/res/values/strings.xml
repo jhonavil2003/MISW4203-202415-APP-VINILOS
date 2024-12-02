@@ -27,6 +27,8 @@
 
     <string name="error_creating_album">Error al crear el álbum</string>
     <string name="error_invalid_release_date_album">Fecha de lanzamiento inválida. Formato esperado: yyyy-MM-dd</string>
+    <string name="add_track">Add track</string>
+
 
 
     <string-array name="genres">
