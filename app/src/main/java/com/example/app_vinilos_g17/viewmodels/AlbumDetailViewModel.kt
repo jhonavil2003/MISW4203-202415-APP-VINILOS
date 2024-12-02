@@ -2,13 +2,18 @@ package com.example.app_vinilos_g17.viewmodels
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.app_vinilos_g17.models.Album
 import com.example.app_vinilos_g17.repositories.AlbumDetailRepository
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class AlbumDetailViewModel(application: Application, albumId: Int) : AndroidViewModel(application) {
 
@@ -54,6 +59,18 @@ class AlbumDetailViewModel(application: Application, albumId: Int) : AndroidView
             desiredFormat.format(date)
         } catch (e: Exception) {
             dateString // Devuelve la fecha original si hay un error
+        }
+    }
+
+    fun setTrack(albumId: Int, album: Map<String, String>) {
+        viewModelScope.launch {
+            try {
+                val albumCreated =  albumRepository.setTrackAlbum(albumId, album)
+                _eventNetworkError.value = false
+            } catch (e: Exception) {
+                Log.e("Track", "Error adding album", e)
+                _eventNetworkError.value = true
+            }
         }
     }
 
