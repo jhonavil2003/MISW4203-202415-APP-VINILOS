@@ -2,22 +2,20 @@ package com.example.app_vinilos_g17.ui.view
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.app_vinilos_g17.ui.adapters.AlbumListAdapter
 import com.example.app_vinilos_g17.databinding.FragmentAlbumListBinding
 import androidx.appcompat.app.AppCompatActivity
 import com.example.app_vinilos_g17.R
 import com.example.app_vinilos_g17.viewmodels.AlbumListViewModel
+import com.google.android.material.snackbar.Snackbar
 
 
 class AlbumListFragment : Fragment() {
@@ -87,6 +85,12 @@ class AlbumListFragment : Fragment() {
                 val albumGenre = dialogView.findViewById<Spinner>(R.id.spinnerAlbumGenre).selectedItem.toString()
                 val albumRecordLabel = dialogView.findViewById<Spinner>(R.id.spinnerAlbumRecordLabel).selectedItem.toString()
 
+                // Validar la fecha de lanzamiento
+                if (!isValidDate(albumReleaseDate)) {
+                    Snackbar.make(binding.root, R.string.error_invalid_release_date_album, Snackbar.LENGTH_LONG).show()
+                    return@setPositiveButton
+                }
+
                 // Handle adding the new album here
                 val newAlbum = mapOf(
                     "name" to albumName,
@@ -108,10 +112,12 @@ class AlbumListFragment : Fragment() {
         dialogBuilder.create().show()
     }
 
+    private fun isValidDate(date: String): Boolean {
+        val regex = Regex("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
+        return regex.matches(date)
+    }
+
     private fun onNetworkError() {
-        if (!viewModel.isNetworkErrorShown.value!!) {
-            Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
-            viewModel.onNetworkErrorShown()
-        }
+        Snackbar.make(binding.root, R.string.error_creating_album, Snackbar.LENGTH_LONG).show()
     }
 }
