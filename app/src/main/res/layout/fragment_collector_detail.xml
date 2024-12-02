@@ -1,0 +1,108 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="collector" type="com.example.app_vinilos_g17.models.Collector"/>
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:paddingBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Información básica -->
+            <TextView
+                android:id="@+id/collectorName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{collector.name}"
+                android:textSize="20sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/collectorTelephone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{collector.telephone}"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/collectorEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{collector.email}"
+                android:layout_marginBottom="16dp" />
+            <!-- Artistas favoritos -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Artista Favorito"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewPerformers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:nestedScrollingEnabled="false" />
+
+            <!-- Álbumes coleccionados -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Album"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewAlbums"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <TextView
+                android:id="@+id/textViewNoAlbums"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No hay album coleccionados"
+                android:visibility="gone" />
+
+
+            <!-- Comentarios -->
+            <TextView
+                android:id="@+id/textViewCommentsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comentarios"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="16dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewComments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
+
+            <TextView
+                android:id="@+id/textViewNoComments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_hay_comentarios"
+                android:visibility="gone" />
+
+
+        </LinearLayout>
+    </ScrollView>
+</layout>
