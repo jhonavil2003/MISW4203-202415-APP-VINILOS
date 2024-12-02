@@ -437,6 +437,36 @@ class NetworkServiceAdapter(context: Context) {
         ))
     }
 
+    suspend fun setTrack(albumId: Int, album: Map<String, String>): String = suspendCoroutine { cont ->
+        val requestBody = JSONObject(album)
+        Log.d(TAG, "Intentando crear track: $requestBody")
+
+        requestQueue.add(postRequest(
+            path = "albums/$albumId/tracks",
+            requestBody = requestBody,
+            onSuccess = { response ->
+                try {
+                    val createdAlbum = AlbumList(
+                        id = response.getInt("id"),
+                        name = response.getString("name"),
+                        cover = response.getString("cover"),
+                        releaseDate = response.getString("releaseDate"),
+                        performers = emptyList()
+                    )
+
+                    // Retornar el objeto AlbumList
+                    cont.resume(response.toString())
+                } catch (e: Exception) {
+                    cont.resumeWithException(e)
+                }
+            },
+            onError = { error ->
+                // Manejar errores de red o parsing
+                cont.resumeWithException(error)
+            }
+        ))
+    }
+
     private fun getRequest(
         path: String,
         responseListener: Response.Listener<String>,
