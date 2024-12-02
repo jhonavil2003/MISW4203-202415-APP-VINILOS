@@ -26,4 +26,19 @@ class CollectorsRepository(val application: Application) {
             return collectors
         }
     }
+
+    suspend fun getCollectorDetail(collectorId: Int): Collector {
+        val cachedCollector = cacheManager.getCollectorDetail(collectorId)
+
+        return if (cachedCollector != null) {
+            Log.d("Cache decision", "Se retorna información desde caché")
+            cachedCollector
+        } else {
+            Log.d("Cache decision", "Se retorna información desde API")
+            val collectorDetail = networkService.getCollectorDetail(collectorId)
+            cacheManager.addCollectorDetail(collectorId, collectorDetail)
+            collectorDetail
+        }
+    }
+
 }

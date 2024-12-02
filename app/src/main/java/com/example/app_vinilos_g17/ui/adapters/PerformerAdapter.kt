@@ -39,28 +39,35 @@ class PerformerAdapter : RecyclerView.Adapter<PerformerAdapter.PerformerViewHold
         private val textViewName: TextView = itemView.findViewById(R.id.textViewPerformerName)
         private val textViewBirthDate: TextView = itemView.findViewById(R.id.textViewPerformerBirthDate)
         private val textViewDescription: TextView = itemView.findViewById(R.id.textViewPerformerDescription)
+        private val textViewCreationDate: TextView = itemView.findViewById(R.id.textViewPerformerCreationDate)
         private val imageView: ImageView = itemView.findViewById(R.id.imageViewPerformer)
 
         fun bind(performer: Performer) {
             textViewName.text = performer.name
-            textViewBirthDate.text = formatBirthDate(performer.birthDate) // Usa el método de formateo
+            textViewBirthDate.text = formatDate(performer.birthDate)
+            textViewCreationDate.text = formatDate(performer.creationDate)
             textViewDescription.text = performer.description
             Glide.with(itemView.context)
                 .load(performer.image)
                 .into(imageView)
         }
 
-        private fun formatBirthDate(dateString: String): String {
+        private fun formatDate(dateString: String?): String {
+
+            if (dateString.isNullOrEmpty() || dateString == "No Date Available") {
+                return "Fecha no disponible"
+            }
+
             val originalFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
             val desiredFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
             return try {
-                val date: Date = originalFormat.parse(dateString)!!
+                val date: Date = originalFormat.parse(dateString) ?: return "Fecha no disponible"
                 desiredFormat.format(date)
             } catch (e: Exception) {
-                dateString // Devuelve la fecha original si hay un error
+                return "Fecha no disponible"
             }
         }
+
     }
 }
-
-

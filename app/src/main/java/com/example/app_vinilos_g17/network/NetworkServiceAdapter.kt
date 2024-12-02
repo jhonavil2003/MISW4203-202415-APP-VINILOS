@@ -17,6 +17,7 @@ import com.example.app_vinilos_g17.models.Track
 import com.example.app_vinilos_g17.models.Artist
 import com.example.app_vinilos_g17.models.SimpleAlbum
 import com.example.app_vinilos_g17.models.PerformerPrize
+import com.example.app_vinilos_g17.models.CollectorAlbum
 import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.coroutines.resume
@@ -270,7 +271,7 @@ class NetworkServiceAdapter(context: Context) {
             }))
     }
 
-    // Optimización del método para obtener detalles de un álbum
+
     suspend fun getArtistDetail(artistId: Int): Artist = suspendCoroutine { cont ->
         requestQueue.add(getRequest("musicians/$artistId",
             { response ->
@@ -330,6 +331,81 @@ class NetworkServiceAdapter(context: Context) {
             }
         ))
     }
+
+    suspend fun getCollectorDetail(collectorId: Int) = suspendCoroutine<Collector> { cont ->
+        requestQueue.add(
+            getRequest("collectors/$collectorId",
+                { response ->
+                    try {
+                        val item = JSONObject(response)
+
+                        val comments = mutableListOf<Comment>()
+                        val commentsArray = item.getJSONArray("comments")
+                        for (i in 0 until commentsArray.length()) {
+                            val commentObj = commentsArray.getJSONObject(i)
+                            val comment = Comment(
+                                id = commentObj.getInt("id"),
+                                description = commentObj.getString("description"),
+                                rating = commentObj.getInt("rating").toString()
+                            )
+                            comments.add(comment)
+                        }
+
+                        val favoritePerformers = mutableListOf<Performer>()
+                        val performersArray = item.getJSONArray("favoritePerformers")
+                        for (i in 0 until performersArray.length()) {
+                            val performerObj = performersArray.getJSONObject(i)
+
+                            // Asignar creación de fecha y nacimiento de manera segura
+                            val creationDate = performerObj.optString("creationDate", "No Date Available")
+                            val birthDate = performerObj.optString("birthDate", "No Date Available")
+
+                            val performer = Performer(
+                                id = performerObj.getInt("id"),
+                                name = performerObj.getString("name"),
+                                image = performerObj.getString("image"),
+                                description = performerObj.getString("description"),
+                                birthDate = birthDate,
+                                creationDate = creationDate
+                            )
+                            favoritePerformers.add(performer)
+                        }
+
+                        val collectorAlbums = mutableListOf<CollectorAlbum>()
+                        val albumsArray = item.getJSONArray("collectorAlbums")
+                        for (i in 0 until albumsArray.length()) {
+                            val albumObj = albumsArray.getJSONObject(i)
+                            val album = CollectorAlbum(
+                                id = albumObj.getInt("id"),
+                                price = albumObj.getInt("price"),
+                                status = albumObj.getString("status")
+                            )
+                            collectorAlbums.add(album)
+                        }
+
+                        val collector = Collector(
+                            collectorId = item.getInt("id"),
+                            name = item.getString("name"),
+                            telephone = item.getString("telephone"),
+                            email = item.getString("email"),
+                            comments = comments,
+                            favoritePerformers = favoritePerformers,
+                            collectorAlbums = collectorAlbums
+                        )
+
+                        cont.resume(collector)
+                    } catch (e: Exception) {
+                        cont.resumeWithException(e)
+                    }
+                },
+                { error ->
+                    cont.resumeWithException(error)
+                }
+            )
+        )
+    }
+
+
 
     suspend fun createAlbum(album: Map<String, String>): AlbumList = suspendCoroutine { cont ->
         val requestBody = JSONObject(album)

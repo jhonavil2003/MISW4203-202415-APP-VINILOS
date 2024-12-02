@@ -35,8 +35,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"/>
+
+            <!-- Nuevo TextView para creationDate -->
+            <TextView
+                android:id="@+id/textViewPerformerCreationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray"/>
         </LinearLayout>
     </LinearLayout>
+
     <TextView
         android:id="@+id/textViewPerformerDescription"
         android:layout_width="match_parent"
