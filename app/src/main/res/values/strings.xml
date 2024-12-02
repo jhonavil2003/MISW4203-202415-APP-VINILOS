@@ -30,6 +30,7 @@
     <string name="add_track">Add track</string>
 
 
+
     <string-array name="genres">
         <item>Classical</item>
         <item>Salsa</item>
